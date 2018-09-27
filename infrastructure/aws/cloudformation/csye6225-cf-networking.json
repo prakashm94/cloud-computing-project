@@ -1,0 +1,168 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+  "Description":"Creating VPC and associated items",
+  "Parameters": {
+    "vpcTag": {
+      "Type": "String"
+    },
+	"subnetTagA":{
+	"Type": "String"
+	},
+	"subnetTagB":{
+	"Type": "String"
+	},
+	"subnetTagC":{
+	"Type": "String"
+	},
+	"subnetTagD":{
+	"Type": "String"
+	},
+	"subnetTagE":{
+	"Type": "String"
+	},
+	"subnetTagF":{
+	"Type": "String"
+	},
+    "igTag" : {
+      "Type" : "String"
+    },
+    "routeTableTag" : {
+      "Type" : "String"
+    }
+  },
+  "Resources" : {
+    "csye6225vpc" : {
+      "Type" : "AWS::EC2::VPC",
+      "Properties" : {
+        "CidrBlock" : "10.0.0.0/16",
+        "Tags" : [ {"Key" : "Name", "Value" : {"Ref" : "vpcTag"}} ]
+      }
+    },
+	"SubnetOne" : {
+      "Type" : "AWS::EC2::Subnet",
+      "Properties" : {
+        "VpcId" : { "Ref" : "csye6225vpc" },
+        "CidrBlock": "10.0.0.0/24",
+		"AvailabilityZone" : "us-east-1a",
+        "Tags" : [ {"Key" : "Application", "Value" : { "Ref" : "subnetTagA"} } ]
+      }
+    },
+	"SubnetTwo" : {
+      "Type" : "AWS::EC2::Subnet",
+      "Properties" : {
+        "VpcId" : { "Ref" : "csye6225vpc" },
+        "CidrBlock" : "10.0.16.0/24",
+		"AvailabilityZone" : "us-east-1b",
+        "Tags" : [ {"Key" : "Application", "Value" : { "Ref" : "subnetTagB"} } ]
+      }
+    },
+	"SubnetThree" : {
+      "Type" : "AWS::EC2::Subnet",
+      "Properties" : {
+        "VpcId" : { "Ref" : "csye6225vpc" },
+        "CidrBlock" : "10.0.2.0/24",
+		"AvailabilityZone" : "us-east-1c",
+        "Tags" : [ {"Key" : "Application", "Value" : { "Ref" : "subnetTagC"} } ]
+      }
+    },
+	"SubnetFour" : {
+      "Type" : "AWS::EC2::Subnet",
+      "Properties" : {
+        "VpcId" : { "Ref" : "csye6225vpc" },
+        "CidrBlock": "10.0.1.0/24",
+		"AvailabilityZone" : "us-east-1d",
+        "Tags" : [ {"Key" : "Application", "Value" : { "Ref" : "subnetTagD"} } ]
+      }
+    },
+	"SubnetFive" : {
+      "Type" : "AWS::EC2::Subnet",
+      "Properties" : {
+        "VpcId" : { "Ref" : "csye6225vpc" },
+        "CidrBlock" : "10.0.17.0/24",
+		"AvailabilityZone" : "us-east-1e",
+        "Tags" : [ {"Key" : "Application", "Value" : { "Ref" : "subnetTagE"} } ]
+      }
+    },
+	"SubnetSix" : {
+      "Type" : "AWS::EC2::Subnet",
+      "Properties" : {
+        "VpcId" : { "Ref" : "csye6225vpc" },
+        "CidrBlock" : "10.0.3.0/24",
+		"AvailabilityZone" : "us-east-1f",
+        "Tags" : [ {"Key" : "Application", "Value" : { "Ref" : "subnetTagF"} } ]
+      }
+    },
+    "csye6225InternetGateway" : {
+      "Type" : "AWS::EC2::InternetGateway",
+      "Properties" : {
+        "Tags" : [ {"Key" : "Name", "Value" : {"Ref" : "igTag"}}]
+      }
+    },
+    "AttachGateway" : {
+      "Type" : "AWS::EC2::VPCGatewayAttachment",
+      "Properties" : {
+        "VpcId" : { "Ref" : "csye6225vpc" },
+        "InternetGatewayId" : { "Ref" : "csye6225InternetGateway" }
+      }
+    },
+    "csye6225prt" : {
+      "Type" : "AWS::EC2::RouteTable",
+      "Properties" : {
+        "VpcId" : { "Ref" : "csye6225vpc" },
+        "Tags" : [ { "Key" : "Name", "Value" : {"Ref" : "routeTableTag"} } ]
+      }
+    },
+    
+    "SubnetRouteAttach":{
+      "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties" : {
+        "RouteTableId" : { "Ref" : "csye6225prt" },
+        "SubnetId" : { "Ref" : "SubnetOne" }
+      }
+    },
+    "SubnetRouteAttachTwo":{
+      "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties" : {
+        "RouteTableId" : { "Ref" : "csye6225prt" },
+        "SubnetId" : { "Ref" : "SubnetTwo" }
+      }
+    },
+    "SubnetRouteAttachThree":{
+      "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties" : {
+        "RouteTableId" : { "Ref" : "csye6225prt" },
+        "SubnetId" : { "Ref" : "SubnetThree" }
+      }
+    },
+    "SubnetRouteAttachFour":{
+      "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties" : {
+        "RouteTableId" : { "Ref" : "csye6225prt" },
+        "SubnetId" : { "Ref" : "SubnetFour" }
+      }
+    },
+    "SubnetRouteAttachFive":{
+      "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties" : {
+        "RouteTableId" : { "Ref" : "csye6225prt" },
+        "SubnetId" : { "Ref" : "SubnetFive" }
+      }
+    },
+    "SubnetRouteAttachSix":{
+      "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties" : {
+        "RouteTableId" : { "Ref" : "csye6225prt" },
+        "SubnetId" : { "Ref" : "SubnetSix" }
+      }
+    },
+    "myRoute" : {
+      "Type" : "AWS::EC2::Route",
+      "DependsOn" : "csye6225InternetGateway",
+      "Properties" : {
+        "RouteTableId" : { "Ref" : "csye6225prt" },
+        "DestinationCidrBlock" : "0.0.0.0/0",
+        "GatewayId" : { "Ref" : "csye6225InternetGateway" }
+      }
+    }
+  }
+}
