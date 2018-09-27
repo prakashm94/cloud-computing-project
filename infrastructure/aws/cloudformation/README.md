@@ -1,4 +1,4 @@
-#Steps to run cloudformation on your local:
+# Steps to run cloudformation on your local:
 
 1. Make sure you have aws credentials set. following colland: aws credentials
 then enter the access and secret key
