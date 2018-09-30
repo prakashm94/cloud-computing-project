@@ -8,18 +8,13 @@ import neu.coe.project.cloudapp.Repository.UserDataRepository;
 import org.hibernate.Transaction;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import javax.websocket.server.PathParam;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
@@ -48,18 +43,8 @@ public class TransactionController {
             System.out.println("in auth");
             TransactionData t = getTransaction(id);
 
-//            if(t==null){
-//
-//               // return new ResponseEntity(HttpStatus.BAD_REQUEST);
-//
-//                return ResponseEntity
-//                        .status(HttpStatus.NO_CONTENT)
-//                        .body("Transaction not found");
-//                //return "Transaction not found";
-//            }
 
-           // System.out.println("out if"+t.getDescription());
-            if(t!=null) {
+            if (t != null) {
 
                 if (t.getId().equals(id)) {
                     if (t.getUserData().getUsername().equals(username)) {
@@ -67,45 +52,32 @@ public class TransactionController {
                         ObjectMapper mapper = new ObjectMapper();
                         System.out.println("in if" + t.getDescription());
                         String jsonInString = mapper.writeValueAsString(t);
-                       // return jsonInString;
+                        // return jsonInString;
                         return ResponseEntity
                                 .status(HttpStatus.OK)
                                 .body(jsonInString);
                     } else {
-                      //  map=new HashMap<>();
-                      //  map.put("message", "You don't have access for this transaction");
-                        //return new JSONObject(map).toString();
-                       // return "You don't have access for this transaction";
+
                         return ResponseEntity
                                 .status(HttpStatus.UNAUTHORIZED)
                                 .body("You don't have access for this transaction");
                     }
-                    }
                 }
-            else {
-                map=new HashMap<>();
+            } else {
+                map = new HashMap<>();
                 map.put("message", "Transaction id not present");
-                // return new JSONObject(map).toString();
-//                    return ResponseEntity
-//                            .status(HttpStatus.UNAUTHORIZED)
-//                            .body("You don't have access for this transaction");
-                //return "transaction id not present";
+
                 return ResponseEntity
                         .status(HttpStatus.NO_CONTENT)
                         .body("Transaction not found");
             }
-
         }
-        //System.out.println(transactionRepository.findById(id));
-        //map.put("message", "check username and password");
-        //return new JSONObject(map).toString();
-        //return "check username and password";
+
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body("You don't have access for this transaction");
     }
 
-    //@PostMapping("/transactions/register")
     @RequestMapping(method = POST, path = "/transactions/register")
     public @ResponseBody ResponseEntity<String> createTransaction(@RequestHeader HttpHeaders httpRequest,@RequestParam String amount,@RequestParam String category,
                                              @RequestParam String date,@RequestParam String description,@RequestParam String merchant) {
@@ -124,11 +96,7 @@ public class TransactionController {
             String password = values[1];
             UserData user = new UserData();
             if (Authenticate(username, password)) {
-//                String hashedPassword = loginController.hashPassword(password);
-//                user.setUsername(username);
-//                user.setPassword(hashedPassword);
-//                userDataRepository.save(user);
-//            } else {
+
                 user = getUserData(username);
 
             transactionData.setUserData(user);
@@ -136,30 +104,76 @@ public class TransactionController {
             ObjectMapper mapper = new ObjectMapper();
 
             String jsonInString = mapper.writeValueAsString(transactionData);
-            //return jsonInString;
+
                 return ResponseEntity
                         .status(HttpStatus.CREATED)
                         .body(jsonInString);
             }
             else{
                 map.put("message", "check username and password");
-                //return new JSONObject(map).toString();
+
                 return ResponseEntity
                         .status(HttpStatus.UNAUTHORIZED)
                         .body("You are unauthorized. Check username and password");
             }
         }
         catch (Exception ex){
-//            map=new HashMap<>();
-//            map.put("message", "Incorrect data to store in DB");
-//            return new JSONObject(map).toString();
+
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body("Please enter correct parameters");
-           // return ""+ex.getMessage();
+
         }
     }
 
+
+    @RequestMapping(method = DELETE, path = "/transactions/{transactionId}")
+    public @ResponseBody ResponseEntity<String> deleteTransaction(@RequestHeader HttpHeaders httpRequest, @PathVariable(value = "transactionId") String transactionId) {
+        final String authorization = httpRequest.getFirst("Authorization");
+        String[] values = loginController.retrieveParameters(authorization);
+        String username = values[0];
+        String password = values[1];
+        UserData user = new UserData();
+        if (Authenticate(username, password)) {
+            TransactionData t = getTransaction(transactionId);
+            if(t!=null) {
+                if (t.getId().equals(transactionId)) {
+                    if (t.getUserData().getUsername().equals(username)) {
+                        System.out.println("del start");
+                        transactionRepository.delete(t);
+                        System.out.println("del success");
+                        return ResponseEntity
+                                .status(HttpStatus.OK)
+                                .body("Transaction deleted successfully");
+                    } else {
+
+                        return ResponseEntity
+                                .status(HttpStatus.UNAUTHORIZED)
+                                .body("You are unauthorized to delete this transaction");
+
+                    }
+                } else {
+
+                    return ResponseEntity
+                            .status(HttpStatus.BAD_REQUEST)
+                            .body("Check Transaction ID");
+
+                }
+            }
+            else{
+
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body("Check Transaction ID");
+
+            }
+
+        }
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body("You are unauthorized. Check username and password");
+
+    }
 
 
     @RequestMapping(method = PUT, path = "/transactions/{transactionId}")
@@ -170,7 +184,7 @@ public class TransactionController {
             String[] values = loginController.retrieveParameters(authorization);
             String username = values[0];
             String password = values[1];
-            //TransactionData transactionData= new TransactionData();
+
 
             System.out.println("put success");
             if (Authenticate(username, password)) {
@@ -199,34 +213,30 @@ public class TransactionController {
                                 .status(HttpStatus.OK)
                                 .body(jsonInString);
                     } else {
-//                       map=new HashMap<>();
-//                       map.put("message", "You don't have access for this transaction");
-//                       return new JSONObject(map).toString();
+
                         return ResponseEntity
                                 .status(HttpStatus.UNAUTHORIZED)
                                 .body("You are unauthorized to edit this transaction");
-                        //return "You don't have access for this transaction";
+
                     }
 
                 } else {
                     System.out.println("DESC: " + transactionData.getDescription());
                     map = new HashMap<>();
                     map.put("message", "Updated Successfully\"");
-                    // return new JSONObject(map).toString();
+
                     return ResponseEntity
                             .status(HttpStatus.NO_CONTENT)
                             .body("There is no content for this transaction");
-                    // return "Updated Successfully";
+
 
                 }
             } else {
-//        map=new HashMap<>();
-//        map.put("message", "Please Check your username and password\"");
-//        return new JSONObject(map).toString();
+
                 return ResponseEntity
                         .status(HttpStatus.UNAUTHORIZED)
                         .body("You are unauthorized. Check username and password");
-                //return "Please Check your username and password";
+
             }
         }
         catch (Exception e){
