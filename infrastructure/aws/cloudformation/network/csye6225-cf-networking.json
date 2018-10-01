@@ -43,7 +43,8 @@
       "Properties" : {
         "VpcId" : { "Ref" : "csye6225vpc" },
         "CidrBlock": "10.0.0.0/24",
-		"AvailabilityZone" : "us-east-1a",
+	"MapPublicIpOnLaunch" : true,
+	"AvailabilityZone" : "us-east-1a",
         "Tags" : [ {"Key" : "Application", "Value" : { "Ref" : "subnetTagA"} } ]
       }
     },
@@ -52,7 +53,8 @@
       "Properties" : {
         "VpcId" : { "Ref" : "csye6225vpc" },
         "CidrBlock" : "10.0.16.0/24",
-		"AvailabilityZone" : "us-east-1b",
+	"MapPublicIpOnLaunch" : true,
+	"AvailabilityZone" : "us-east-1b",
         "Tags" : [ {"Key" : "Application", "Value" : { "Ref" : "subnetTagB"} } ]
       }
     },
@@ -61,7 +63,8 @@
       "Properties" : {
         "VpcId" : { "Ref" : "csye6225vpc" },
         "CidrBlock" : "10.0.2.0/24",
-		"AvailabilityZone" : "us-east-1c",
+	"MapPublicIpOnLaunch" : true,
+	"AvailabilityZone" : "us-east-1c",
         "Tags" : [ {"Key" : "Application", "Value" : { "Ref" : "subnetTagC"} } ]
       }
     },
@@ -164,5 +167,21 @@
         "GatewayId" : { "Ref" : "csye6225InternetGateway" }
       }
     }
+  },
+  "Outputs" : {
+    "vpcId" : {
+      "Description" : "The ID of web subnet",
+      "Value" : {"Ref" : "csye6225vpc"},
+      "Export" : {
+        "Name" : "networkVpcId"
+      }
+    },
+    "publicSubnetIdOne" : {
+      "Description" : "The ID of web server security group",
+      "Value" : {"Ref" : "SubnetOne"},
+      "Export" : {
+        "Name" : "publicSubnetOne"
+      }
+    } 
   }
 }
