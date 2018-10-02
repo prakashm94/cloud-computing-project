@@ -1,6 +1,5 @@
 package neu.coe.project.cloudapp.Controllers;
 
-
 import neu.coe.project.cloudapp.Model.UserData;
 import neu.coe.project.cloudapp.Repository.UserDataRepository;
 import org.json.JSONObject;
@@ -12,13 +11,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -42,28 +41,34 @@ public class LoginController {
 
 
     @RequestMapping("/time")
-    public @ResponseBody String time(@RequestHeader HttpHeaders httpRequest) {
+    public @ResponseBody
+    String time(@RequestHeader HttpHeaders httpRequest) {
 
         final String authorization = httpRequest.getFirst("Authorization");
         String[] values = retrieveParameters(authorization);
         Map<String,String> map= new HashMap<String,String>();
+
+        if(values.length==0){
+            map.put("message", "Login Unsuccessful. Please Enter Username and password in Basic Auth");
+            return new JSONObject(map).toString();
+        }
+
         String username = values[0];
         String password = values[1];
 
         if (Authenticate(username, password)) {
 
             SimpleDateFormat ft = new SimpleDateFormat("E yyyy.MM.dd 'at' hh:mm:ss a zzz");
+
             map.put("time", ft.format(new Date()));
             map.put("message", "Login Successful");
-
+            System.out.println(new JSONObject(map));
             return new JSONObject(map).toString();
 
         } else {
             map.put("message", "Login Unsuccessful. Please Check username and password");
-
+            System.out.println(new JSONObject(map));
             return new JSONObject(map).toString();
-
-            //return "You are not logged in. Please check your username and password again";
         }
 
     }
@@ -114,7 +119,7 @@ public class LoginController {
             map.put("message", "User "+username+" created successfully");
             return new JSONObject(map).toString();
         } else {
-             map.put("message", "Username already exists");
+            map.put("message", "Username already exists");
             return new JSONObject(map).toString();
         }
     }
@@ -134,6 +139,7 @@ public class LoginController {
 
     public boolean checkPassword(String password_plaintext, String stored_hash) {
         boolean password_verified = false;
+        System.out.println(stored_hash+""+password_plaintext);
         if (null == stored_hash || !stored_hash.startsWith("$2a$"))
             throw new java.lang.IllegalArgumentException("Invalid hash provided for comparison");
 
@@ -141,5 +147,6 @@ public class LoginController {
 
         return (password_verified);
     }
+
 
 }
