@@ -1,0 +1,85 @@
+{
+ "AWSTemplateFormatVersion" : "2010-09-09",
+ "Description":"Creating ",
+ "Parameters": {
+   "webSecurityGroupTag" : {
+   "Type" : "String"
+  },
+	"dbSecurityGroupTag" : {
+   "Type" : "String"
+  },
+	"keyTag" : {
+   "Type" : "String"
+  },
+  "ec2InstanceTag" : {
+	"Type" : "String"
+  }
+ },
+ "Resources" : {
+  "webServerSecurityGroup" : {
+   "Type" : "AWS::EC2::SecurityGroup",
+   "Properties" : {
+    "GroupName" : {"Ref" : "webSecurityGroupTag"},
+    "GroupDescription" : "Security tag for web server",
+    "SecurityGroupIngress" : [
+     {
+      "CidrIp" : "0.0.0.0/0",
+      "FromPort" : 22,
+      "IpProtocol" : "tcp",
+      "ToPort" : 22
+     },
+     {
+      "CidrIp" : "0.0.0.0/0",
+      "FromPort" : 80,
+      "IpProtocol" : "tcp",
+      "ToPort" : 80
+     },
+     {
+      "CidrIp" : "0.0.0.0/0",
+      "FromPort" : 443,
+      "IpProtocol" : "tcp",
+      "ToPort" : 443
+     }
+     ],
+    "VpcId" : {"Fn::ImportValue" : "networkVpcId"} 
+   }
+  },
+  "dbSecurityGroup" : {
+		"Type" : "AWS::EC2::SecurityGroup",
+		"Properties" : {
+		 "GroupName" : {"Ref" : "dbSecurityGroupTag"},
+		 "GroupDescription" : "Security tag for web server",
+		 "SecurityGroupIngress" : [
+			{
+			 "SourceSecurityGroupId" : {"Ref" : "webServerSecurityGroup"},
+			 "FromPort" : 3306,
+			 "IpProtocol" : "tcp",
+			 "ToPort" : 3306
+			}
+		  ],
+		 "VpcId" : {"Fn::ImportValue" : "networkVpcId"} 
+	  }
+	},
+	"ec2Instance" : {
+	 "Type" : "AWS::EC2::Instance",
+	  "Properties" : {
+		 "Tags" : [ {"Key" : "Name", "Value" : {"Ref" : "ec2InstanceTag"}} ],
+		 "ImageId" : "ami-9887c6e7",
+		 "KeyName" : { "Ref" : "keyTag" },
+		 "InstanceType" : "t2.micro",
+		 "DisableApiTermination" : "false",
+		 "BlockDeviceMappings": [
+			{
+			 "DeviceName" : "/dev/sda1",
+			 "Ebs" : {
+				"VolumeType": "gp2",
+				"VolumeSize": "20"
+			 }
+			}
+		 ],
+		 "SecurityGroupIds" : [{"Ref": "webServerSecurityGroup"}],
+		 "SubnetId" : {"Fn::ImportValue" : "publicSubnetOne"}
+	 }
+	}	
+ }
+}

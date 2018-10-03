@@ -8,5 +8,6 @@ then enter the access and secret key
 3. Make sure both files are in the same directory
 
 4. in command line run this command to create the all items: bash csye6225-aws-networking-setup-stack.sh "STACK_NAME"
+
 5. in command line run this command to delete the all items: bash csye6225-aws-networking-teardown.sh "STACK_NAME"
 
