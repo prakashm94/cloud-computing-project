@@ -102,3 +102,7 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# JetBrains Rider
+.idea/
+*.sln.iml
