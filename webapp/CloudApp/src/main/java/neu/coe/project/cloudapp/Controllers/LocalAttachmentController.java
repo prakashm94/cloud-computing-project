@@ -63,7 +63,7 @@ public class LocalAttachmentController {
 
 
 
-    @RequestMapping(method = POST, path ="/transactions/{transactionId}/attachments")
+    @RequestMapping(method = POST, path = "/transactions/{tid}/attachments")
     public @ResponseBody
     ResponseEntity<String> createAttachment(@RequestHeader HttpHeaders httpRequest, @PathVariable(value = "tid") String transactionId, @RequestParam("url") MultipartFile file) throws Exception {
         final String authorization = httpRequest.getFirst("Authorization");
@@ -127,7 +127,6 @@ public class LocalAttachmentController {
     }
 
 
-
     @RequestMapping(method = GET, path ="/transactions/{transactionId}/attachments")
     public @ResponseBody
     ResponseEntity<String> getAllAttachments(@RequestHeader HttpHeaders httpRequest, @PathVariable(value = "transactionId") String tid) {
@@ -176,6 +175,8 @@ public class LocalAttachmentController {
         }
         return null;
     }
+
+
 
     @RequestMapping(method = PUT, path = "/transactions/{transactionId}/attachments/{aid}")
     public @ResponseBody ResponseEntity<String> putTransaction(@RequestHeader HttpHeaders httpRequest, @PathVariable(value = "transactionId") String transactionId, @PathVariable(value = "aid") String aid, @RequestParam("url") MultipartFile file) {
