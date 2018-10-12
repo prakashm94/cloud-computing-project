@@ -190,7 +190,152 @@ public class AwsClientController {
         return null;
     }
 
+    @RequestMapping(method = PUT, path = "/transactions/{transactionId}/attachments/{aid}")
+    public @ResponseBody ResponseEntity<String> putTransaction(@RequestHeader HttpHeaders httpRequest, @PathVariable(value = "transactionId") String transactionId, @PathVariable(value = "aid") String aid, @RequestParam("url") MultipartFile file) {
+        try {
+            final String authorization = httpRequest.getFirst("Authorization");
+            String[] values = loginController.retrieveParameters(authorization);
+            String username = values[0];
+            String password = values[1];
+            TransactionData t = transactionController.getTransaction(transactionId);
 
+            if (Authenticate(username, password)) {
+
+                Attachment a = null;
+                for (Attachment at : t.getAttachments()) {
+                    if (aid.equals(at.getId())) {
+                        a = at;
+                        break;
+                    }
+                }
+
+                File convFile = new File(file.getOriginalFilename());
+                String ext = FilenameUtils.getExtension(convFile.getPath());
+
+                if (ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg") || ext.equalsIgnoreCase("png")) {
+                    System.out.println("File start" + file.getOriginalFilename());
+                    if (t != null) {
+
+                        List<Attachment> as = t.getAttachments();
+                        if (t.getUserData().getUsername().equals(username))
+                        {
+                            ProfileCredentialsProvider credentialsProvider
+                                    = new ProfileCredentialsProvider(System.getenv(awsCredentialsPath));
+
+                            AmazonS3 s3client = AmazonS3ClientBuilder
+                                    .standard()
+                                    .withCredentials(credentialsProvider)
+                                    .build();
+
+                            String[] s = a.getUrl().split("/");
+                            String x = s[s.length - 1];
+                            System.out.println(x + "delete obj");
+                            s3client.deleteObject(new DeleteObjectRequest(bucketName, x));
+                            s3client.putObject(new PutObjectRequest(bucketName, a.getId(), convFile).withCannedAcl(CannedAccessControlList.PublicRead));
+                            System.out.println("Amazon url" + s3client.getUrl(bucketName, a.getId()));
+                            a.setUrl(s3client.getUrl(bucketName, a.getId()).toString());
+
+
+                        }
+
+                        else {
+                            return ResponseEntity
+                                    .status(HttpStatus.UNAUTHORIZED)
+                                    .body("Unauthorized for this transaction");
+                        }
+                        System.out.println("before transaction setting" + as.get(0).getId());
+                        t.setAttachments(as);
+                        transactionDataRepository.save(t);
+                        ObjectMapper mapper = new ObjectMapper();
+
+                        String jsonInString = mapper.writeValueAsString(t);
+                        return ResponseEntity
+                                .status(HttpStatus.OK)
+                                .body(jsonInString);
+                    } else {
+                        return ResponseEntity
+                                .status(HttpStatus.BAD_REQUEST)
+                                .body("Please check transaction Id");
+                    }
+                } else {
+                    return ResponseEntity
+                            .status(HttpStatus.BAD_REQUEST)
+                            .body("This is not a image");
+                }
+            } else {
+                return ResponseEntity
+                        .status(HttpStatus.UNAUTHORIZED)
+                        .body("Not Authorised");
+            }
+        }catch (Exception e){
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Bad Request");
+        }
+    }
+
+
+    @RequestMapping(method = DELETE, path = "/transactions/{id}/attachments/{aid}")
+    public @ResponseBody ResponseEntity<String> deleteAttachment(@RequestHeader HttpHeaders httpRequest, @PathVariable(value = "id") String transactionId, @PathVariable(value = "aid") String aid) {
+        final String authorization = httpRequest.getFirst("Authorization");
+        String[] values = loginController.retrieveParameters(authorization);
+        String username = values[0];
+        String password = values[1];
+        if (Authenticate(username, password)) {
+            TransactionData t = transactionController.getTransaction(transactionId);
+
+            if(t!=null){
+                if(t.getUserData().getUsername().equals(username))
+                {
+                    List<Attachment> attachments = t.getAttachments();
+                    Attachment a = null;
+
+                    for (Attachment at : attachments) {
+                        if (aid.equals(at.getId())) {
+                            a = at;
+                            break;
+                        }
+                    }
+
+
+                    ProfileCredentialsProvider credentialsProvider
+                            = new ProfileCredentialsProvider(System.getenv(awsCredentialsPath));
+
+                    AmazonS3 s3client = AmazonS3ClientBuilder
+                            .standard()
+                            .withCredentials(credentialsProvider)
+                            .build();
+
+                    String[] s = a.getUrl().split("/");
+                    String x = s[s.length - 1];
+                    s3client.deleteObject(new DeleteObjectRequest(bucketName, x));
+
+                    t.getAttachments().remove(a);
+                    attachmentRepository.delete(a);
+                    return ResponseEntity
+                            .status(HttpStatus.OK)
+                            .body("Deleted Successfully");
+                }
+                else {
+                    return ResponseEntity
+                            .status(HttpStatus.UNAUTHORIZED)
+                            .body("Unauthorized for this Transaction");
+                }
+            }
+
+            else{
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body("No transaction found");
+            }
+        }
+        else{
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Unauthorized");
+        }
+
+    }
 
     public boolean Authenticate(String username, String password) {
 

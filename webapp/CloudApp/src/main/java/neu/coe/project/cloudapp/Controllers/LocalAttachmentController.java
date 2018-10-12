@@ -63,6 +63,120 @@ public class LocalAttachmentController {
 
 
 
+    @RequestMapping(method = POST, path ="/transactions/{transactionId}/attachments")
+    public @ResponseBody
+    ResponseEntity<String> createAttachment(@RequestHeader HttpHeaders httpRequest, @PathVariable(value = "tid") String transactionId, @RequestParam("url") MultipartFile file) throws Exception {
+        final String authorization = httpRequest.getFirst("Authorization");
+        String[] values = loginController.retrieveParameters(authorization);
+        String username = values[0];
+        String password = values[1];
+
+        System.out.println("put success");
+        if (Authenticate(username, password)) {
+            Attachment a = new Attachment();
+
+            TransactionData t = transactionController.getTransaction(transactionId);
+            File convFile = new File(file.getOriginalFilename());
+            String ext = FilenameUtils.getExtension(convFile.getPath());
+            FileOutputStream fos = new FileOutputStream(convFile);
+            fos.write(file.getBytes());
+            fos.close();
+            if (ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg") || ext.equalsIgnoreCase("png")){
+                if (t != null) {
+                    List<Attachment> as = t.getAttachments();
+
+                    try {
+                        // Get the file and save it somewhere
+                        byte[] bytes = file.getBytes();
+                        Path path = Paths.get(filePath + a.getId() + "." + ext);
+                        Files.write(path, bytes);
+                        a.setUrl(path.toString());
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return ResponseEntity
+                                .status(HttpStatus.BAD_REQUEST)
+                                .body("Please give the path correctly. File not able to copy");
+                    }
+
+                    as.add(a);
+                    t.setAttachments(as);
+                    transactionRepository.save(t);
+                    ObjectMapper mapper = new ObjectMapper();
+
+                    String jsonInString = mapper.writeValueAsString(t);
+                    return ResponseEntity
+                            .status(HttpStatus.OK)
+                            .body(jsonInString);
+                } else {
+                    return ResponseEntity
+                            .status(HttpStatus.BAD_REQUEST)
+                            .body("Please check transaction Id");
+                }
+            }
+            else{
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body("This is not a image");
+            }
+        }else{
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Not Authorised");
+        }
+    }
+
+
+
+    @RequestMapping(method = GET, path ="/transactions/{transactionId}/attachments")
+    public @ResponseBody
+    ResponseEntity<String> getAllAttachments(@RequestHeader HttpHeaders httpRequest, @PathVariable(value = "transactionId") String tid) {
+        try {
+            final String authorization = httpRequest.getFirst("Authorization");
+            String[] values = loginController.retrieveParameters(authorization);
+            String username = values[0];
+            String password = values[1];
+            if (Authenticate(username, password)) {
+                TransactionData t = transactionController.getTransaction(tid);
+
+                if (t != null) {
+                    if (t.getId().equals(tid)) {
+                        if (t.getUserData().getUsername().equals(username)) {
+
+                            List<Attachment> at = transactionController.getTransaction(tid).getAttachments();
+                            ObjectMapper mapper = new ObjectMapper();
+
+                            String jsonInString = mapper.writeValueAsString(at);
+
+                            return ResponseEntity
+                                    .status(HttpStatus.OK)
+                                    .body(jsonInString);
+                        } else {
+                            return ResponseEntity
+                                    .status(HttpStatus.UNAUTHORIZED)
+                                    .body("Unauthorized for this Transaction");
+                        }
+                    }
+                } else {
+
+                    return ResponseEntity
+                            .status(HttpStatus.NO_CONTENT)
+                            .body("Transaction not found");
+                }
+            } else {
+                return ResponseEntity
+                        .status(HttpStatus.UNAUTHORIZED)
+                        .body("Not Authorised");
+            }
+        } catch (Exception e) {
+
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(e.getMessage());
+        }
+        return null;
+    }
+
     @RequestMapping(method = PUT, path = "/transactions/{transactionId}/attachments/{aid}")
     public @ResponseBody ResponseEntity<String> putTransaction(@RequestHeader HttpHeaders httpRequest, @PathVariable(value = "transactionId") String transactionId, @PathVariable(value = "aid") String aid, @RequestParam("url") MultipartFile file) {
         try {

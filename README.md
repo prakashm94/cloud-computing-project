@@ -55,7 +55,39 @@ email: shah.vru@husky.neu.edu
  after succesfully authenticating and authorization your username and password we will see the success message "Deletion succesful" else  error message "you dont have access to this transaction". and you can check the updated values in mysql.
 
     5. In all the above operations if tranactionid is incorrect/invalid we get error message "Transactionid not found".
+
+# Creating a attachments and uoploading attachments to S3 bucket and local system based on profile
+  
+   1. Create a S3 bucket on aws.
+   2. Create a Attachments table in mysql.
+   3. Configure the application-dev.properties file with aws region, S3 bucket name and aws user credentials.
+
+
+    CRUD operations for uploading Attachments into localfile system "If profile is not a Dev".
+    
+    1. Create : Send Post request http://localhost:8080/transactions/{transactionId}/attachments select Basic Auth and in body select the image file then after succesfully authenticating and authorization your username, password and file extension we will see the success message "Uploaded succesfully" then you can check the attachmentid in mysql in attachment table and check the image in local file system path.
+
+    2. Read : Send Get Request http://localhost:8080/transactions/{transactionId}/attachments select Basic Auth after succesfully authenticating and authorization your username, password then you will see all the file details else we get error message "you dont have access to this transaction".
+
+    3. Update : Send PUT Request http://localhost:8080/transactions/{transactionId}/attachments/{aid} select Basic Auth and in body select the image file to update then after succesfully authenticating and authorization your username, password and file extension we will see the success message "Uploaded succesfully" then you can check the attachmentid in mysql in attachment table and check the image in local file system path.
      
+    4. Delete : Send DELETE request http://localhost:8080/transactions/{transactionId}/attachments/{aid} select Basic Auth and in body select the image file to update then after succesfully authenticating and authorization your username, password then we will see the success message "Deleted succesfully" then you can check the attachmentid in mysql in attachment table and check for the image in local file system path.
+
+
+
+
+    CRUD operations for uploading Attachments into AWS S3 Bucket "If profile is Dev".
+    
+    1. Create : Send Post request http://localhost:8080/transactions/{transactionId}/attachments select Basic Auth and in body select the image file then after succesfully authenticating and authorization your username, password and file extension we will see the success message "Uploaded succesfully" then you can check the attachmentid in mysql in attachment table and check the image in AWS console S3 bucket.
+
+    2. Read : Send Get Request http://localhost:8080/transactions/{transactionId}/attachments select Basic Auth after succesfully authenticating and authorization your username, password then you will see all the file details else we get error message "you dont have access to this transaction".
+
+    3. Update : Send PUT Request http://localhost:8080/transactions/{transactionId}/attachments/{aid} select Basic Auth and in body select the image file to update then after succesfully authenticating and authorization your username, password and file extension we will see the success message "Uploaded succesfully" then you can check the attachmentid in mysql in attachment table and check the image in AWS console S3 bucket.
+     
+    4. Delete : Send DELETE request http://localhost:8080/transactions/{transactionId}/attachments/{aid} select Basic Auth and in body select the image file to update then after succesfully authenticating and authorization your username, password then we will see the success message "Deleted succesfully" then you can check the attachmentid in mysql in attachment table and check for the image in AWS console S3 bucket.
+
+
+
 
 # Instructions to run unit, integration and/or load tests.
 
