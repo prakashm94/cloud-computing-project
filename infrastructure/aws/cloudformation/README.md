@@ -9,11 +9,11 @@ then enter the access and secret key
 
 4. To create the network stack, go to the network folder and run this command in the command line  with all items: bash csye6225-aws-cf-create-stack.sh "STACK_NAME"
 
-5. Once the stack is successfully created, go to the application folder and run this command in the command line  with all items: bash csye6225-aws-cf-create-application-stack.sh "STACK_NAME" "KEY_TAG" "EC2_INSTANCE"
+5. Once the stack is successfully created, go to the application folder and run this command in the command line  with all items: bash csye6225-aws-cf-create-application-stack.sh "STACK_NAME" "KEY_TAG" "EC2_INSTANCE" "S3_BUCKET_NAME"
 
 6. You can see the application stack will be created. Wait until the EC2 instance is initialized completely.
 
-7. In order to terminate the application resources, go to the application folder and run this command in the command line  with all items: bash csye6225-aws-cf-terminate-application-stack.sh "STACK_NAME" "KEY_TAG" "EC2_INSTANCE"
+7. In order to terminate the application resources, go to the application folder and run this command in the command line  with all items: bash csye6225-aws-cf-terminate-application-stack.sh "STACK_NAME" "KEY_TAG" "EC2_INSTANCE" "S3_BUCKET_NAME"
 
 8. To delete the network stack, go to the network folder and run this command in the command line  with all items: bash csye6225-aws-cf-terminate-stack.sh "STACK_NAME"
 
