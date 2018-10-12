@@ -106,3 +106,4 @@ venv.bak/
 # JetBrains Rider
 .idea/
 *.sln.iml
+application.properties
