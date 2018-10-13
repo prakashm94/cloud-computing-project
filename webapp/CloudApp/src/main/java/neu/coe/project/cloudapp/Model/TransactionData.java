@@ -7,6 +7,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -36,8 +38,13 @@ public class TransactionData {
     @JsonIgnore
     private UserData userData;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn( name="id", nullable=false, columnDefinition = "string default \"0000\"")
+    private List<Attachment> attachments;
+
     public TransactionData(){
-        id=UUID.randomUUID().toString();
+        //id=UUID.randomUUID().toString();
+        attachments= new ArrayList<>();
     }
 
     public UserData getUserData() {
@@ -55,7 +62,7 @@ public class TransactionData {
     public void setId(String id) {
         this.id = id;
     }
-//UUID.randomUUID().toString()
+
     public String getDescription() {
         return description;
     }
@@ -94,5 +101,13 @@ public class TransactionData {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public List<Attachment> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<Attachment> attachments) {
+        this.attachments = attachments;
     }
 }

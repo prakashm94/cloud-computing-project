@@ -1,14 +1,13 @@
 package neu.coe.project.cloudapp.Controllers;
 
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import neu.coe.project.cloudapp.Model.TransactionData;
 import neu.coe.project.cloudapp.Model.UserData;
+import neu.coe.project.cloudapp.Repository.AttachmentRepository;
 import neu.coe.project.cloudapp.Repository.TransactionDataRepository;
 import neu.coe.project.cloudapp.Repository.UserDataRepository;
-import org.hibernate.Transaction;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,10 +24,13 @@ public class TransactionController {
     Map<String,String> map= new HashMap<String,String>();
     @Autowired
     private TransactionDataRepository transactionRepository;
+    @Autowired
+    private AttachmentRepository attachmentRepository;
 
     @Autowired
     private UserDataRepository userDataRepository;
     LoginController loginController= new LoginController();
+
 
     @RequestMapping(method = GET, path ="/transactions/{transactionId}")
     public @ResponseBody
@@ -40,7 +42,6 @@ public class TransactionController {
         String password = values[1];
 
         if (Authenticate(username, password)) {
-            System.out.println("in auth");
             TransactionData t = getTransaction(id);
 
 
@@ -50,9 +51,8 @@ public class TransactionController {
                     if (t.getUserData().getUsername().equals(username)) {
 
                         ObjectMapper mapper = new ObjectMapper();
-                        System.out.println("in if" + t.getDescription());
                         String jsonInString = mapper.writeValueAsString(t);
-                        // return jsonInString;
+
                         return ResponseEntity
                                 .status(HttpStatus.OK)
                                 .body(jsonInString);
@@ -64,8 +64,6 @@ public class TransactionController {
                     }
                 }
             } else {
-                map = new HashMap<>();
-                map.put("message", "Transaction id not present");
 
                 return ResponseEntity
                         .status(HttpStatus.NO_CONTENT)
@@ -89,7 +87,6 @@ public class TransactionController {
             transactionData.setDate(date);
             transactionData.setDescription(description);
             transactionData.setMerchant(merchant);
-            System.out.println("sada " + transactionData.getCategory());
             final String authorization = httpRequest.getFirst("Authorization");
             String[] values = loginController.retrieveParameters(authorization);
             String username = values[0];
@@ -110,7 +107,6 @@ public class TransactionController {
                         .body(jsonInString);
             }
             else{
-                map.put("message", "check username and password");
 
                 return ResponseEntity
                         .status(HttpStatus.UNAUTHORIZED)
@@ -139,9 +135,9 @@ public class TransactionController {
             if(t!=null) {
                 if (t.getId().equals(transactionId)) {
                     if (t.getUserData().getUsername().equals(username)) {
-                        System.out.println("del start");
+
                         transactionRepository.delete(t);
-                        System.out.println("del success");
+
                         return ResponseEntity
                                 .status(HttpStatus.OK)
                                 .body("Transaction deleted successfully");
@@ -186,9 +182,7 @@ public class TransactionController {
             String password = values[1];
 
 
-            System.out.println("put success");
             if (Authenticate(username, password)) {
-                System.out.println("put success3");
                 TransactionData transactionData = getTransaction(transactionId);
                 transactionData.setAmount(amount);
                 transactionData.setCategory(category);
@@ -197,15 +191,11 @@ public class TransactionController {
                 transactionData.setMerchant(merchant);
                 transactionData.setId(transactionId);
 
-                System.out.println("put success2");
                 if (transactionData != null) {
-                    System.out.println(transactionData.getUserData().getUsername() + "    usrname    " + username);
 
                     if (transactionData.getUserData().getUsername().equals(username)) {
                         transactionRepository.findAll();
-                        System.out.println("put start");
                         transactionRepository.save(transactionData);
-                        System.out.println("put success");
                         ObjectMapper mapper = new ObjectMapper();
 
                         String jsonInString = mapper.writeValueAsString(transactionData);
@@ -221,9 +211,6 @@ public class TransactionController {
                     }
 
                 } else {
-                    System.out.println("DESC: " + transactionData.getDescription());
-                    map = new HashMap<>();
-                    map.put("message", "Updated Successfully\"");
 
                     return ResponseEntity
                             .status(HttpStatus.NO_CONTENT)
@@ -262,35 +249,37 @@ public class TransactionController {
         return null;
     }
 
+
+
+
+
+
+
     public TransactionData getTransaction(String id){
-        System.out.println("trabs"+id);
+
         Iterable<TransactionData> list= new ArrayList<>();
         list= transactionRepository.findAll();
-       // transactionRepository.findAll().forEach(TransactionData t){
-
+TransactionData td=null;
         for (TransactionData t:list) {
             if(t.getId().equals(id)){
-                System.out.println("inside get"+t.getCategory());
-                return t;
+                td= t;
+                break;
             }
         }
-        return null;
+        return td;
     }
 
     public boolean Authenticate(String username, String password) {
-        System.out.println("inside Authrnetinscatie"+userDataRepository);
         Iterable<UserData> list = userDataRepository.findAll();
-        System.out.println("inside Authrnetinscatie222222222"+userDataRepository);
         for (UserData u : list) {
-            System.out.println("inside Authrnetinscatie33333333"+u);
             if (u.getUsername().equalsIgnoreCase(username) && checkPassword(password, u.getPassword())) {
 
-                System.out.println("inside Authrnetinscatie4444"+u);
                 return true;
             }
         }
         return false;
     }
+
     public boolean checkPassword(String password_plaintext, String stored_hash) {
         boolean password_verified = false;
         System.out.println(stored_hash+""+password_plaintext);
