@@ -152,7 +152,7 @@ public class AwsClientController {
             if (Authenticate(username, password)) {
                 TransactionData t = transactionController.getTransaction(tid);
 
-                if (t != null) {
+                if (t != null ) {
                     if (t.getId().equals(tid)) {
                         if (t.getUserData().getUsername().equals(username)) {
 
@@ -214,7 +214,7 @@ public class AwsClientController {
 
                 if (ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg") || ext.equalsIgnoreCase("png")) {
                     System.out.println("File start" + file.getOriginalFilename());
-                    if (t != null) {
+                    if (t != null ) {
 
                         List<Attachment> as = t.getAttachments();
                         if (t.getUserData().getUsername().equals(username))
@@ -285,8 +285,7 @@ public class AwsClientController {
             TransactionData t = transactionController.getTransaction(transactionId);
 
             if(t!=null){
-                if(t.getUserData().getUsername().equals(username))
-                {
+                if(t.getUserData().getUsername().equals(username)) {
                     List<Attachment> attachments = t.getAttachments();
                     Attachment a = null;
 
@@ -297,9 +296,9 @@ public class AwsClientController {
                         }
                     }
 
-
-                    ProfileCredentialsProvider credentialsProvider
-                            = new ProfileCredentialsProvider(System.getenv(awsCredentialsPath));
+                    if (a.getUrl().contains("s3.amazonaws.com/")){
+                        ProfileCredentialsProvider credentialsProvider
+                                = new ProfileCredentialsProvider(System.getenv(awsCredentialsPath));
 
                     AmazonS3 s3client = AmazonS3ClientBuilder
                             .standard()
@@ -315,6 +314,11 @@ public class AwsClientController {
                     return ResponseEntity
                             .status(HttpStatus.OK)
                             .body("Deleted Successfully");
+                }else {
+                        return ResponseEntity
+                                .status(HttpStatus.BAD_REQUEST)
+                                .body("File does not belong to S3");
+                }
                 }
                 else {
                     return ResponseEntity

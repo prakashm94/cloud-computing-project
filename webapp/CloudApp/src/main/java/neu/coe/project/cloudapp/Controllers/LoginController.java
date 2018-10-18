@@ -5,6 +5,8 @@ import neu.coe.project.cloudapp.Repository.UserDataRepository;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -101,7 +103,7 @@ public class LoginController {
 
     @RequestMapping(method = POST, path = "/user/register") // Map ONLY GET Requests
     public @ResponseBody
-    String addNewUser(@RequestHeader HttpHeaders httpRequest) {
+    ResponseEntity<String> addNewUser(@RequestHeader HttpHeaders httpRequest) {
         final String authorization = httpRequest.getFirst("Authorization");
 
         String[] values = retrieveParameters(authorization);
@@ -109,18 +111,34 @@ public class LoginController {
         String password = values[1];
         Map<String,String> map= new HashMap<String,String>();
 
-        if (findUsername(username) == false) {
+        if(isValidEmailAddress(username)) {
 
-            String hashedPassword = hashPassword(password);
-            UserData n = new UserData();
-            n.setUsername(username);
-            n.setPassword(hashedPassword);
-            userDataRepository.save(n);
-            map.put("message", "User "+username+" created successfully");
-            return new JSONObject(map).toString();
-        } else {
-            map.put("message", "Username already exists");
-            return new JSONObject(map).toString();
+
+            if (findUsername(username) == false) {
+
+                String hashedPassword = hashPassword(password);
+                UserData n = new UserData();
+                n.setUsername(username);
+                n.setPassword(hashedPassword);
+                userDataRepository.save(n);
+//                map.put("message", "User " + username + " created successfully");
+//                return new JSONObject(map).toString();
+                return ResponseEntity
+                        .status(HttpStatus.OK)
+                        .body("User "+username+" created successfully");
+            } else {
+//                map.put("message", "Username already exists");
+//                return new JSONObject(map).toString();
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body("Username already exists");
+            }
+        } else{
+           // map.put("message", "This is not a valid email address");
+            //return new JSONObject(map).toString();
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Please enter a valid email address");
         }
     }
 
@@ -146,6 +164,13 @@ public class LoginController {
         password_verified = BCrypt.checkpw(password_plaintext, stored_hash);
 
         return (password_verified);
+    }
+
+    public boolean isValidEmailAddress(String email) {
+        String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+        java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
+        java.util.regex.Matcher m = p.matcher(email);
+        return m.matches();
     }
 
 

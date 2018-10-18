@@ -82,7 +82,7 @@ public class LocalAttachmentController {
             fos.write(file.getBytes());
             fos.close();
             if (ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg") || ext.equalsIgnoreCase("png")){
-                if (t != null) {
+                if (t != null && !t.getUserData().getUsername().equalsIgnoreCase(username)) {
                     List<Attachment> as = t.getAttachments();
 
                     try {
@@ -276,8 +276,7 @@ public class LocalAttachmentController {
             TransactionData t = transactionController.getTransaction(transactionId);
 
             if(t!=null){
-                if(t.getUserData().getUsername().equals(username))
-                {
+                if(t.getUserData().getUsername().equals(username)) {
                     List<Attachment> attachments = t.getAttachments();
                     Attachment a = null;
 
@@ -287,7 +286,10 @@ public class LocalAttachmentController {
                             break;
                         }
                     }
-                    File file = new File(a.getUrl());
+
+                    if (!a.getUrl().contains("s3.amazonaws.com/")){
+
+                        File file = new File(a.getUrl());
                     System.out.println(a.getUrl());
                     System.out.println(file.getAbsolutePath());
                     if (file.delete()) {
@@ -300,6 +302,12 @@ public class LocalAttachmentController {
                     return ResponseEntity
                             .status(HttpStatus.OK)
                             .body("Deleted Successfully");
+                }
+                else {
+                        return ResponseEntity
+                                .status(HttpStatus.BAD_REQUEST)
+                                .body("File not available");
+                }
                 }
                 else {
                     return ResponseEntity
