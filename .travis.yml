@@ -8,9 +8,8 @@ install: true
 
 script:
   - pwd
-  - cd webapp
-  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-  - mvn test -B
+  - cd webapp/CloudApp
+  - ./mvnw clean install
   - cd build/libs
   - ls -al
   - cd ../../..
