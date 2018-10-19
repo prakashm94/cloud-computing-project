@@ -12,9 +12,9 @@ script:
   - pwd
   - ls -al
   - mvn clean install
-  - cd build/libs
+  - cd target
   - ls -al
-  - cd ../../..
+  - cd ../..
   - pwd
   - ls -al
 
