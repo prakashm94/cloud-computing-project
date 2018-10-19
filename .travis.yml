@@ -9,7 +9,8 @@ install: true
 script:
   - pwd
   - cd webapp
-  - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  - mvn test -B
   - cd build/libs
   - ls -al
   - cd ../../..
