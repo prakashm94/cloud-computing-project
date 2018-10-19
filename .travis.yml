@@ -9,8 +9,8 @@ install: true
 script:
   - pwd
   - cd webapp/CloudApp
--pwd
--ls -al
+  - pwd
+  - ls -al
   - ./mvnw clean install
   - cd build/libs
   - ls -al
