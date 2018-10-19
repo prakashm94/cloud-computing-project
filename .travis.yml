@@ -11,7 +11,7 @@ script:
   - cd webapp/CloudApp
   - pwd
   - ls -al
-  - mvn clean install
+  - mvn clean install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
   - cd target
   - ls -al
   - cd ../..
@@ -22,10 +22,12 @@ after_success:
   - pwd
   - ls -al
   - mkdir codedeploy_artifact
+  - pwd
   - cp infrastructure/aws/codedeploy/*.sh .
   - cp infrastructure/aws/codedeploy/*.yml .
+  - pwd
   - ls -al
-  - zip -r csye6225-cloudapp.zip CloudApp/target/CloudApp.jar *.sh *.yml
+  - zip -r csye6225-cloudapp.zip CloudApp/target/CloudApp.war *.sh *.yml
   - ls -al
   - mv csye6225-cloudapp.zip codedeploy_artifact/
   - ls -al
