@@ -24,7 +24,8 @@ after_success:
   - mkdir codedeploy_artifact
   - cp infrastructure/aws/codedeploy/*.sh .
   - cp infrastructure/aws/codedeploy/*.yml .
-  - zip -r csye6225-cloudapp.zip webapp/build/libs/ROOT.war *.sh *.yml
+  - ls -al
+  - zip -r csye6225-cloudapp.zip CloudApp/target/CloudApp.jar *.sh *.yml
   - ls -al
   - mv csye6225-cloudapp.zip codedeploy_artifact/
   - ls -al
