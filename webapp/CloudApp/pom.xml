@@ -127,6 +127,7 @@
 
 
     <build>
+	<finalName>CloudApp</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
