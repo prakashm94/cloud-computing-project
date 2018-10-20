@@ -1,0 +1,16 @@
+version: 0.0
+os: linux
+
+files:
+ - source: ./cloud-native-app/target/webapp.war
+   destination: /var/lib/tomcat8/webapps
+
+hooks:
+ AfterInstall:
+  - location: ./afterInstall.sh
+    timeout: 180
+    runas: ubuntu
+ ApplicationStart:
+  - location: ./applicationStart.sh
+    timeout: 180
+    runas: ubuntu

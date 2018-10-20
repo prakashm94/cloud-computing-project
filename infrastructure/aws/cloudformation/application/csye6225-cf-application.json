@@ -19,6 +19,15 @@
     }
  },
  "Resources" : {
+	"CodeDeployEC2ServiceRoleInstanceProfile": {
+			"Type": "AWS::IAM::InstanceProfile",
+			"Properties": {
+				"Path": "/",
+				"Roles": [
+					"CodeDeployEC2ServiceRole"
+				]
+			}
+    },
     "DynamoDBTable" : {
       "Type" : "AWS::DynamoDB::Table",
       "Properties" : {
@@ -93,6 +102,15 @@
 		 "ImageId" : "ami-9887c6e7",
 		 "KeyName" : { "Ref" : "keyTag" },
 		 "InstanceType" : "t2.micro",
+		 "Tags": [
+          {
+            "Key": "Name",
+            "Value": "EC2Instance"
+          }
+        ],
+		"IamInstanceProfile": {
+         "Ref": "CodeDeployEC2ServiceRoleInstanceProfile"
+        },
 		 "DisableApiTermination" : "true",
 		 "BlockDeviceMappings": [
 			{
@@ -104,7 +122,46 @@
 			}
 		 ],
 		 "SecurityGroupIds" : [{"Ref": "webServerSecurityGroup"}],
-		 "SubnetId" : {"Fn::ImportValue" : "publicSubnetOne"}
+		 "SubnetId" : {"Fn::ImportValue" : "publicSubnetOne"},
+		 "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash -xe \n",
+                "sudo apt-get update \n",
+                "sudo apt-get install openjdk-8-jdk -y \n",
+                "sudo apt-get install ruby -y \n",
+                "sudo apt-get install wget -y \n",
+                "sudo apt-get install python -y \n",
+                "sudo apt-get update \n",
+                "sudo wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install \n",
+                "sudo chmod +x ./install \n",
+                "sudo ./install auto \n",
+                "sudo service codedeploy-agent start \n",
+                "sudo apt-get install tomcat8 -y \n",
+                "sudo chmod 777 /var/lib/tomcat8 \n",
+                "sudo echo \"JAVA_OPTS=\\\"\\${JAVA_OPTS} -Dspring.datasource.username=csye6225master -Dspring.datasource.password=csye6225password  -Dspring.profiles.active=dev\\\"\" >> /etc/default/tomcat8 \n",
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "echo 'JAVA_OPTS=\"${JAVA_OPTS} -Dspring.datasource.url=\\\"jdbc:mysql://",
+                      {
+                        "Fn::GetAtt": [
+                          "myRDSInstance",
+                          "Endpoint.Address"
+                        ]
+                      },
+                      ":3306/csye6225\\\"\"' >> /etc/default/tomcat8 \n"
+                    ]
+                  ]
+                },
+                "sudo service tomcat8 restart \n"
+              ]
+            ]
+          }
+        }
 	 }
 	},
  "myDBSubnetGroup" : {
