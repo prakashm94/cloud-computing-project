@@ -29,7 +29,7 @@ after_success:
   - cp infrastructure/aws/codedeploy/*.yml .
   - pwd
   - ls -al
-  - zip -r csye6225-cloudapp.zip webapp/CloudApp/target/CloudApp.war *.sh *.yml
+  - zip -r csye6225-cloudapp.zip -i webapp/CloudApp/target/CloudApp.war 
   - ls -al
   - mv csye6225-cloudapp.zip codedeploy_artifact/
   - cd codedeploy_artifact
