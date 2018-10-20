@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 
 files:
- - source: ./cloud-native-app/target/webapp.war
+ - source: ./webapp/CloudApp/target/CloudApp.war
    destination: /var/lib/tomcat8/webapps
 
 hooks:

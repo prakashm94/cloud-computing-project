@@ -179,5 +179,16 @@
             "BucketName": "code-deploy.me"
          }
       }
+},
+"Outputs" : {
+    "servicerole" : {
+      "Description" : "The EC2 Service",
+      "Value" : {"Ref" : "CodeDeployEC2ServiceRole"},
+      "Export" : {
+        "Name" : "csye6225-cicd-CodeDeployEC2ServiceRole"
+      }
+    }
+
 	}
+ 
 }

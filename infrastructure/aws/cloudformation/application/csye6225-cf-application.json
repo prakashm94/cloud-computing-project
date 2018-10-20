@@ -24,7 +24,7 @@
 			"Properties": {
 				"Path": "/",
 				"Roles": [
-					"CodeDeployEC2ServiceRole"
+					{"Fn::ImportValue" : "csye6225-cicd-CodeDeployEC2ServiceRole"}
 				]
 			}
     },
@@ -98,7 +98,6 @@
 	"ec2Instance" : {
 	 "Type" : "AWS::EC2::Instance",
 	  "Properties" : {
-		 "Tags" : [ {"Key" : "Name", "Value" : {"Ref" : "ec2InstanceTag"}} ],
 		 "ImageId" : "ami-9887c6e7",
 		 "KeyName" : { "Ref" : "keyTag" },
 		 "InstanceType" : "t2.micro",
