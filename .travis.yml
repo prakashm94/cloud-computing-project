@@ -62,6 +62,6 @@ deploy:
     deployment_group: $deployment_group
     region: us-east-1
     # secret_access_key: $secret_access_key
-    -wait-until-deployed: true
+    wait-until-deployed: true
     on:
       all_branches: true
