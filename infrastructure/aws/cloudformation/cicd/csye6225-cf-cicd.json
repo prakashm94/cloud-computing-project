@@ -133,7 +133,9 @@
                   "codedeploy:GetDeploymentConfig"
                 ],
                 "Resource": [
-                  "*"
+                 "arn:aws:codedeploy:us-east-1:830173955131:deploymentconfig:CodeDeployDefault.OneAtATime",
+                 "arn:aws:codedeploy:us-east-1:830173955131:deploymentconfig:CodeDeployDefault.HalfAtATime",
+                 "arn:aws:codedeploy:us-east-1:830173955131:deploymentconfig:CodeDeployDefault.AllAtOnce"
                 ]
               }
             ]
