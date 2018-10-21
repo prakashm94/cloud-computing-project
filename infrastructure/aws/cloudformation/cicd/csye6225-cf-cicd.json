@@ -1,5 +1,26 @@
 {
-    "AWSTemplateFormatVersion": "2010-09-09",
+    "Parameters":{
+        "resource1" : {
+            "Type" : "String"
+        },
+        "resource2" : {
+            "Type" : "String"
+        },
+        "resource3" : {
+            "Type" : "String"
+        },
+        "resource4" : {
+            "Type" : "String"
+        },
+	"resource5" : {
+            "Type" : "String"
+        },
+	"domainName" : {
+            "Type" : "String"
+        }
+    },
+	
+	"AWSTemplateFormatVersion": "2010-09-09",
     "Resources": {
       "CodeDeployEC2ServiceRole": {
         "Type": "AWS::IAM::Role",
@@ -37,7 +58,7 @@
                 ],
 		  "Effect": "Allow",
           "Resource": [
-					"*"
+		{"Ref" : "resource5"}
                 ]
               }
             ]
@@ -90,7 +111,7 @@
                   "s3:PutObject"
                 ],
                 "Resource": [
-                  "*"
+                  {"Ref" : "resource5"}
                 ]
               }
             ]
@@ -114,7 +135,7 @@
                   "codedeploy:GetApplicationRevision"
                 ],
                 "Resource": [
-                  "*"
+                  {"Ref" : "resource1"}
                 ]
               },
               {
@@ -133,9 +154,9 @@
                   "codedeploy:GetDeploymentConfig"
                 ],
                 "Resource": [
-                 "arn:aws:codedeploy:us-east-1:830173955131:deploymentconfig:CodeDeployDefault.OneAtATime",
-                 "arn:aws:codedeploy:us-east-1:830173955131:deploymentconfig:CodeDeployDefault.HalfAtATime",
-                 "arn:aws:codedeploy:us-east-1:830173955131:deploymentconfig:CodeDeployDefault.AllAtOnce"
+				  {"Ref" : "resource2"},
+                  {"Ref" : "resource3"},
+                  {"Ref" : "resource4"}
                 ]
               }
             ]
@@ -178,7 +199,7 @@
 	  "s3Bucket": {
          "Type": "AWS::S3::Bucket",
          "Properties": {
-            "BucketName": "code-deploy.me"
+            "BucketName": {"Ref" : "domainName"}
          }
       }
 },

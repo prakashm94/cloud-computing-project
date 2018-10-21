@@ -173,10 +173,9 @@
                     "systemctl daemon-reload",
                     "systemctl enable tomcat.service",
                     "systemctl start tomcat.service",
-                    "sudo service tomcat restart ",
                     "echo 'everything success'",
                                 
-                "sudo echo \"JAVA_OPTS=\\\"\\${JAVA_OPTS} -Dspring.datasource.username=csye6225master -Dspring.datasource.password=csye6225password  -Dspring.profiles.active=dev\\\"\" >> /etc/default/tomcat8 ",
+                "sudo echo \"JAVA_OPTS=\\\"\\${JAVA_OPTS} -Dspring.datasource.username=csye6225master -Dspring.datasource.password=csye6225password  -Dspring.profiles.active=dev\\\"\" >> /etc/default/tomcat",
                 {
                   "Fn::Join": [
                     "",
@@ -188,10 +187,11 @@
                           "Endpoint.Address"
                         ]
                       },
-                      ":3306/csye6225\\\"\"' >> /etc/default/tomcat8 "
+                      ":3306/csye6225\\\"\"' >> /etc/default/tomcat/bin/env "
                     ]
                   ]
                 },
+                "sudo service tomcat restart ",
                 "echo 'success'"
               ]
             ]
