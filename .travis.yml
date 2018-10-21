@@ -55,6 +55,7 @@ deploy:
       all_branches: true
   - provider: codedeploy
     access_key_id: $access_key_id
+    secret_access_key: $sak
     bucket: $s3_bucket
     key: csye6225-cloudapp.zip
     bundle_type: zip
