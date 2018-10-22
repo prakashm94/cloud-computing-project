@@ -4,6 +4,9 @@ jdk:
 
 sudo: false
 
+git:
+  lfs_skip_smudge: true
+
 install: true
 
 script:
