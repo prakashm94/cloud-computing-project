@@ -28,6 +28,9 @@
     },
     "routeTableTag" : {
       "Type" : "String"
+    },
+    "privateRouteTableTag" : {
+       "Type" : "String"
     }
   },
   "Resources" : {
@@ -116,6 +119,13 @@
         "Tags" : [ { "Key" : "Name", "Value" : {"Ref" : "routeTableTag"} } ]
       }
     },
+    "privateRoutTable" : {
+      "Type" : "AWS::EC2::RouteTable",
+      "Properties" : {
+        "VpcId" : { "Ref" : "csye6225vpc" },
+        "Tags" : [ { "Key" : "Name", "Value" : {"Ref" : "privateRouteTableTag"} } ]
+      }
+    },
     
     "SubnetRouteAttach":{
       "Type" : "AWS::EC2::SubnetRouteTableAssociation",
@@ -141,21 +151,21 @@
     "SubnetRouteAttachFour":{
       "Type" : "AWS::EC2::SubnetRouteTableAssociation",
       "Properties" : {
-        "RouteTableId" : { "Ref" : "csye6225prt" },
+        "RouteTableId" : { "Ref" : "privateRoutTable" },
         "SubnetId" : { "Ref" : "SubnetFour" }
       }
     },
     "SubnetRouteAttachFive":{
       "Type" : "AWS::EC2::SubnetRouteTableAssociation",
       "Properties" : {
-        "RouteTableId" : { "Ref" : "csye6225prt" },
+        "RouteTableId" : { "Ref" : "privateRoutTable" },
         "SubnetId" : { "Ref" : "SubnetFive" }
       }
     },
     "SubnetRouteAttachSix":{
       "Type" : "AWS::EC2::SubnetRouteTableAssociation",
       "Properties" : {
-        "RouteTableId" : { "Ref" : "csye6225prt" },
+        "RouteTableId" : { "Ref" : "privateRoutTable" },
         "SubnetId" : { "Ref" : "SubnetSix" }
       }
     },
