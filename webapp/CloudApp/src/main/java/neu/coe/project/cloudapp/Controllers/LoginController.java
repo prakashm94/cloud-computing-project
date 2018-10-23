@@ -75,6 +75,28 @@ public class LoginController {
 
     }
 
+ @RequestMapping("/times")
+    public @ResponseBody
+    String time() {
+
+      
+        Map<String,String> map= new HashMap<String,String>();
+
+       
+
+       
+
+            SimpleDateFormat ft = new SimpleDateFormat("E yyyy.MM.dd 'at' hh:mm:ss a zzz");
+
+            map.put("time", ft.format(new Date()));
+            map.put("message", "time displayed Successful");
+            System.out.println(new JSONObject(map));
+            return new JSONObject(map).toString();
+
+      
+
+    }
+
     public boolean Authenticate(String username, String password) {
         Iterable<UserData> list = userDataRepository.findAll();
 
