@@ -61,8 +61,6 @@ public class LocalAttachmentController {
     @Value("${image.filepath}")
     private String filePath;
 
-
-
     @RequestMapping(method = POST, path = "/transactions/{tid}/attachments")
     public @ResponseBody
     ResponseEntity<String> createAttachment(@RequestHeader HttpHeaders httpRequest, @PathVariable(value = "tid") String transactionId, @RequestParam("url") MultipartFile file) throws Exception {
@@ -78,12 +76,14 @@ public class LocalAttachmentController {
             TransactionData t = transactionController.getTransaction(transactionId);
             File convFile = new File(file.getOriginalFilename());
             String ext = FilenameUtils.getExtension(convFile.getPath());
-            FileOutputStream fos = new FileOutputStream(convFile);
-            fos.write(file.getBytes());
-            fos.close();
+//            FileOutputStream fos = new FileOutputStream(convFile);
+//            fos.write(file.getBytes());
+//            fos.close();
             if (ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg") || ext.equalsIgnoreCase("png")){
-                if (t != null && !t.getUserData().getUsername().equalsIgnoreCase(username)) {
-                    List<Attachment> as = t.getAttachments();
+                if (t != null ) {
+                    System.out.println("username"+t.getUserData().getUsername());
+                    if (t.getUserData().getUsername().equalsIgnoreCase(username)){
+                        List<Attachment> as = t.getAttachments();
 
                     try {
                         // Get the file and save it somewhere
@@ -108,6 +108,11 @@ public class LocalAttachmentController {
                     return ResponseEntity
                             .status(HttpStatus.OK)
                             .body(jsonInString);
+                } else {
+                    return ResponseEntity
+                            .status(HttpStatus.UNAUTHORIZED)
+                            .body("Transaction does not belong to you.");
+                }
                 } else {
                     return ResponseEntity
                             .status(HttpStatus.BAD_REQUEST)
@@ -196,9 +201,9 @@ public class LocalAttachmentController {
                 }
                 File convFile = new File(file.getOriginalFilename());
                 String ext = FilenameUtils.getExtension(convFile.getPath());
-                FileOutputStream fos = new FileOutputStream(convFile);
-                fos.write(file.getBytes());
-                fos.close();
+//                FileOutputStream fos = new FileOutputStream(convFile);
+//                fos.write(file.getBytes());
+//                fos.close();
                 if (ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg") || ext.equalsIgnoreCase("png")) {
                     if (t != null) {
                         if (t.getUserData().getUsername().equals(username))

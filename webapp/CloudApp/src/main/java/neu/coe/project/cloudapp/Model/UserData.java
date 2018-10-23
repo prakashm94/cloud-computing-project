@@ -4,7 +4,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name= "userdata", schema = "login_aws")
+@Table(name= "userdata")
 public class UserData {
     @Id
     private String username;

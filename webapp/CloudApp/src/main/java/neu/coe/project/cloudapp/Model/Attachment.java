@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "attachment", schema = "login_aws")
+@Table(name = "attachment")
 public class Attachment {
 
     @Id

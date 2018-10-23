@@ -49,7 +49,8 @@ public class AwsClientController {
 
     Map<String,String> map= new HashMap<String,String>();
 
-    @Value("${cloud.aws.region.static")
+//    @Value("${cloud.aws.region.static")
+    @Value("${aws.s3.region}")
     private String region;
 
     @Value("${aws.s3.bucketname}")
@@ -81,13 +82,16 @@ public class AwsClientController {
         String username = values[0];
         String password = values[1];
 
-        System.out.println("put success");
+        System.out.println("post success");
         if (Authenticate(username, password)) {
             Attachment a = new Attachment();
 
             TransactionData t = transactionController.getTransaction(transactionId);
             File convFile = new File(file.getOriginalFilename());
             String ext = FilenameUtils.getExtension(convFile.getPath());
+            FileOutputStream fos = new FileOutputStream(convFile);
+            fos.write(file.getBytes());
+            fos.close();
 
             if (ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg") || ext.equalsIgnoreCase("png")){
                 if (t != null) {
@@ -211,6 +215,9 @@ public class AwsClientController {
 
                 File convFile = new File(file.getOriginalFilename());
                 String ext = FilenameUtils.getExtension(convFile.getPath());
+                FileOutputStream fos = new FileOutputStream(convFile);
+                fos.write(file.getBytes());
+                fos.close();
 
                 if (ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg") || ext.equalsIgnoreCase("png")) {
                     System.out.println("File start" + file.getOriginalFilename());

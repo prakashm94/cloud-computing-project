@@ -11,7 +11,7 @@ script:
   - cd webapp/CloudApp
   - pwd
   - ls -al
-  - ./mvnw package
+  - mvn clean install
   - cd target
   - ls -al
   - cd ../..

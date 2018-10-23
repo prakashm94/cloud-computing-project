@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "TransactionData", schema = "login_aws")
+@Table(name = "TransactionData")
 public class TransactionData {
 
     @Id
     @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(name = "id")
     private String id;
 
@@ -39,7 +39,8 @@ public class TransactionData {
     private UserData userData;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn( name="id", nullable=false, columnDefinition = "string default \"0000\"")
+    //@JoinColumn( name="id", nullable=false, columnDefinition = "string default \"0000\"")
+    @JoinColumn( name="id", nullable=false)
     private List<Attachment> attachments;
 
     public TransactionData(){
