@@ -1,26 +1,5 @@
 {
-    "Parameters":{
-        "resource1" : {
-            "Type" : "String"
-        },
-        "resource2" : {
-            "Type" : "String"
-        },
-        "resource3" : {
-            "Type" : "String"
-        },
-        "resource4" : {
-            "Type" : "String"
-        },
-	"resource5" : {
-            "Type" : "String"
-        },
-	"domainName" : {
-            "Type" : "String"
-        }
-    },
-	
-	"AWSTemplateFormatVersion": "2010-09-09",
+    "AWSTemplateFormatVersion": "2010-09-09",
     "Resources": {
       "CodeDeployEC2ServiceRole": {
         "Type": "AWS::IAM::Role",
@@ -58,7 +37,7 @@
                 ],
 		  "Effect": "Allow",
           "Resource": [
-		{"Ref" : "resource5"}
+					"*"
                 ]
               }
             ]
@@ -111,7 +90,7 @@
                   "s3:PutObject"
                 ],
                 "Resource": [
-                  {"Ref" : "resource5"}
+                  "*"
                 ]
               }
             ]
@@ -135,7 +114,7 @@
                   "codedeploy:GetApplicationRevision"
                 ],
                 "Resource": [
-                  {"Ref" : "resource1"}
+                  "*"
                 ]
               },
               {
@@ -154,9 +133,9 @@
                   "codedeploy:GetDeploymentConfig"
                 ],
                 "Resource": [
-				  {"Ref" : "resource2"},
-                  {"Ref" : "resource3"},
-                  {"Ref" : "resource4"}
+                 "arn:aws:codedeploy:us-east-1:830173955131:deploymentconfig:CodeDeployDefault.OneAtATime",
+                 "arn:aws:codedeploy:us-east-1:830173955131:deploymentconfig:CodeDeployDefault.HalfAtATime",
+                 "arn:aws:codedeploy:us-east-1:830173955131:deploymentconfig:CodeDeployDefault.AllAtOnce"
                 ]
               }
             ]
@@ -199,7 +178,7 @@
 	  "s3Bucket": {
          "Type": "AWS::S3::Bucket",
          "Properties": {
-            "BucketName": {"Ref" : "domainName"}
+            "BucketName": "code-deploy.me"
          }
       }
 },
@@ -211,7 +190,6 @@
         "Name" : "csye6225-cicd-CodeDeployEC2ServiceRole"
       }
     }
-
-	}
+ 	}
  
 }

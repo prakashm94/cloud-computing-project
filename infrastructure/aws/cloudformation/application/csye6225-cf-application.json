@@ -175,7 +175,7 @@
                     "systemctl start tomcat.service",
                     "echo 'everything success'",
                                 
-                "sudo echo \"JAVA_OPTS=\\\"\\${JAVA_OPTS} -Dspring.datasource.username=csye6225master -Dspring.datasource.password=csye6225password  -Dspring.profiles.active=dev\\\"\" >> /etc/default/tomcat",
+                "sudo echo \"JAVA_OPTS=\\\"\\${JAVA_OPTS} -Dspring.datasource.username=csye6225master -Dspring.datasource.password=csye6225password  -Dspring.profiles.active=dev\\\"\" >> /etc/default/tomcat/bin/setenv.sh",
                 {
                   "Fn::Join": [
                     "",
