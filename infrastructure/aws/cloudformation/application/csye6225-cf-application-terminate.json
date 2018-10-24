@@ -11,10 +11,7 @@
 	"keyTag" : {
    "Type" : "String"
   },
-  "ec2InstanceTag" : {
-	"Type" : "String"
-  },
-    "s3BucketTag" : {
+   "s3BucketTag" : {
     "Type" : "String"
     }
  },
@@ -89,7 +86,7 @@
 	"ec2Instance" : {
 	 "Type" : "AWS::EC2::Instance",
 	  "Properties" : {
-		 "Tags" : [ {"Key" : "Name", "Value" : {"Ref" : "ec2InstanceTag"}} ],
+		 "Tags" : [ {"Key" : "Name", "Value" : "EC2Instance"} ],
 		 "ImageId" : "ami-9887c6e7",
 		 "KeyName" : { "Ref" : "keyTag" },
 		 "InstanceType" : "t2.micro",
