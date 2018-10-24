@@ -180,23 +180,27 @@
                     "systemctl enable tomcat.service",
                     "systemctl start tomcat.service",
                     "echo 'everything success'",
-                                
-                "sudo echo \"JAVA_OPTS=\\\"\\${JAVA_OPTS} -Dspring.datasource.username=csye6225master -Dspring.datasource.password=csye6225password  -Dspring.profiles.active=dev\\\"\" >> /etc/default/tomcat/bin/setenv.sh",
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "echo 'JAVA_OPTS=\"${JAVA_OPTS} -Dspring.datasource.url=\\\"jdbc:mysql://",
-                      {
-                        "Fn::GetAtt": [
-                          "myRDSInstance",
-                          "Endpoint.Address"
-                        ]
-                      },
-                      ":3306/csye6225\\\"\"' >> /etc/default/tomcat/bin/env "
-                    ]
-                  ]
-                },
+                
+                "echo '#!/bin/sh' >> /opt/tomcat/bin/setenv.sh ",
+          {
+            "Fn::Sub": "sudo echo \"JAVA_OPTS=\\\"\\$JAVA_OPTS -Dspring.profiles.active=dev\\\"\" >> /opt/tomcat"
+          },
+          {
+            "Fn::Sub": "echo 'JAVA_OPTS=\"$JAVA_OPTS -Dspring.datasource.url=jdbc:mysql://${myRDSInstance.Endpoint.Address}:3306/csye6225\"' >> /opt/tomcat/bin/setenv.sh"
+          },
+          {
+            "Fn::Sub": "echo 'JAVA_OPTS=\"$JAVA_OPTS -Dspring.datasource.username=rootuser\"' >> /opt/tomcat/bin/setenv.sh"
+          },
+          {
+            "Fn::Sub": "echo 'JAVA_OPTS=\"$JAVA_OPTS -Dspring.datasource.password=rds-instance\"' >> /opt/tomcat/bin/setenv.sh"
+          },
+          {
+            "Fn::Sub": "echo 'JAVA_OPTS=\"$JAVA_OPTS -Dbucket.name=${s3BucketTag}\"' >> /opt/tomcat/bin/setenv.sh"
+          },
+
+
+
+
                 "sudo service tomcat restart ",
                 "echo 'successful'"
               ]
@@ -224,8 +228,8 @@
         "DBInstanceClass" : "db.t2.medium",
         "MultiAZ" : false,
         "DBInstanceIdentifier" : "csye6225-fall2018",
-        "MasterUsername" : "csye6225master",
-        "MasterUserPassword" : "csye6225password",
+        "MasterUsername" : "rootuser",
+        "MasterUserPassword" : "rds-instance",
         "DBSubnetGroupName" : {"Ref" : "myDBSubnetGroup"},
         "PubliclyAccessible" : false,
         "VPCSecurityGroups" : [{"Ref": "dbSecurityGroup"}]
