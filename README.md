@@ -87,7 +87,9 @@ email: shah.vru@husky.neu.edu
     4. Delete : Send DELETE request http://localhost:8080/transactions/{transactionId}/attachments/{aid} select Basic Auth and in body select the image file to update then after succesfully authenticating and authorization your username, password then we will see the success message "Deleted succesfully" then you can check the attachmentid in mysql in attachment table and check for the image in AWS console S3 bucket.
 
 
-
+# Run the Travis build then code will be deployed in ec2
+  1. hit the public dns of ec2 follwed by application name
+  2. Perform CRUD operations on user, Transactions and Attachments on Postman and check whether Applications is working.
 
 # Instructions to run unit, integration and/or load tests.
 
