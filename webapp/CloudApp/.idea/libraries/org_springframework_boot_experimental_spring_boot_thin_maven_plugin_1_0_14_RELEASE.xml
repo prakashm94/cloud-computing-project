@@ -39,7 +39,6 @@
       <root url="jar://$PROJECT_DIR$/lib/commons-io-2.5.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/commons-compress-1.11.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/snappy-0.4.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/xz-1.5.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

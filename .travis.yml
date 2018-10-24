@@ -11,10 +11,10 @@ script:
   - cd webapp/CloudApp
   - pwd
   - ls -al
-  - mvn clean install
-  - cd target
+  - gradle build
+  - cd build/libs
   - ls -al
-  - cd ../..
+  - cd ../../..
   - pwd
   - ls -al
 
@@ -28,10 +28,10 @@ after_success:
   - cp infrastructure/aws/codedeploy/*.sh .
   - cp infrastructure/aws/codedeploy/*.yml .
   - ls -al
-  - cd webapp/CloudApp/target
+  - cd webapp/CloudApp/build/libs
   - ls -al
   - cd ../../..
-  - zip -r csye6225-cloudapp.zip . -i webapp/CloudApp/target/CloudApp.war *.sh *.yml
+  - zip -r csye6225-cloudapp.zip . -i webapp/CloudApp/build/libs/CloudApp.war *.sh *.yml
   - ls -al
   - mv csye6225-cloudapp.zip codedeploy_artifact/
   - cd codedeploy_artifact
