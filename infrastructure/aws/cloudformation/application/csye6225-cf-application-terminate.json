@@ -11,14 +11,26 @@
 	"keyTag" : {
    "Type" : "String"
   },
-  "ec2InstanceTag" : {
-	"Type" : "String"
+"DBUSER" : {
+   "Type" : "String"
+  },
+"DBPWD" : {
+   "Type" : "String"
   },
     "s3BucketTag" : {
     "Type" : "String"
     }
  },
  "Resources" : {
+	"CodeDeployEC2ServiceRoleInstanceProfile": {
+			"Type": "AWS::IAM::InstanceProfile",
+			"Properties": {
+				"Path": "/",
+				"Roles": [
+					{"Fn::ImportValue" : "csye6225-cicd-CodeDeployEC2ServiceRole"}
+				]
+			}
+    },
     "DynamoDBTable" : {
       "Type" : "AWS::DynamoDB::Table",
       "Properties" : {
@@ -65,7 +77,13 @@
       "FromPort" : 443,
       "IpProtocol" : "tcp",
       "ToPort" : 443
-     }
+     },
+     {
+        "CidrIp": "0.0.0.0/0",
+        "FromPort": 8080,
+        "IpProtocol": "tcp",
+        "ToPort": 8080
+      }
      ],
     "VpcId" : {"Fn::ImportValue" : "networkVpcId"} 
    }
@@ -89,10 +107,18 @@
 	"ec2Instance" : {
 	 "Type" : "AWS::EC2::Instance",
 	  "Properties" : {
-		 "Tags" : [ {"Key" : "Name", "Value" : {"Ref" : "ec2InstanceTag"}} ],
 		 "ImageId" : "ami-9887c6e7",
 		 "KeyName" : { "Ref" : "keyTag" },
 		 "InstanceType" : "t2.micro",
+		 "Tags": [
+          {
+            "Key": "Name",
+            "Value": "EC2Instance"
+          }
+        ],
+		"IamInstanceProfile": {
+         "Ref": "CodeDeployEC2ServiceRoleInstanceProfile"
+        },
 		 "DisableApiTermination" : "false",
 		 "BlockDeviceMappings": [
 			{
@@ -126,8 +152,8 @@
         "DBInstanceClass" : "db.t2.medium",
         "MultiAZ" : false,
         "DBInstanceIdentifier" : "csye6225-fall2018",
-        "MasterUsername" : "csye6225master",
-        "MasterUserPassword" : "csye6225password",
+        "MasterUsername" : {"Ref" : "DBUSER"},
+        "MasterUserPassword" : {"Ref" : "DBPWD"},
         "DBSubnetGroupName" : {"Ref" : "myDBSubnetGroup"},
         "PubliclyAccessible" : false,
         "VPCSecurityGroups" : [{"Ref": "dbSecurityGroup"}]
