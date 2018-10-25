@@ -9,6 +9,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import neu.coe.project.cloudapp.Model.Attachment;
@@ -49,8 +50,8 @@ public class AwsClientController {
 
     Map<String,String> map= new HashMap<String,String>();
 
-//    @Value("${cloud.aws.region.static")
-    @Value("${aws.s3.region}")
+    @Value("${cloud.aws.region.static")
+//    @Value("${aws.s3.region}")
     private String region;
 
     @Value("${aws.s3.bucketname}")
@@ -88,11 +89,16 @@ public class AwsClientController {
 
             TransactionData t = transactionController.getTransaction(transactionId);
             File convFile = new File(file.getOriginalFilename());
-            String ext = FilenameUtils.getExtension(convFile.getPath());
-            FileOutputStream fos = new FileOutputStream(convFile);
-            fos.write(file.getBytes());
-            fos.close();
 
+            String ext = FilenameUtils.getExtension(convFile.getPath());
+            System.out.println("conv file: "+convFile.getPath()+"  ...."+ext);
+//            FileOutputStream fos = new FileOutputStream(convFile);
+//            fos.write(file.getBytes());
+//            fos.close();
+
+            byte[] bytes = file.getBytes();
+            Path path = Paths.get("/opt/tomcat/webapps/CloudApp/" + a.getId() + "." + ext);
+            Files.write(path, bytes);
             if (ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg") || ext.equalsIgnoreCase("png")){
                 if (t != null) {
                     if (t.getUserData().getUsername().equals(username))
@@ -104,10 +110,11 @@ public class AwsClientController {
 
                         AmazonS3 s3client = AmazonS3ClientBuilder
                                 .standard()
-                                .withCredentials(credentialsProvider)
+                              //  .withCredentials(credentialsProvider)
                                 .build();
-
-                    s3client.putObject(new PutObjectRequest(bucketName, a.getId(), convFile).withCannedAcl(CannedAccessControlList.PublicRead));
+                        ObjectMetadata metadata= new ObjectMetadata();
+                        metadata.setContentType("image");
+                    s3client.putObject(new PutObjectRequest(bucketName, a.getId(), file.getInputStream(), metadata).withCannedAcl(CannedAccessControlList.PublicRead));
                     a.setUrl(s3client.getUrl(bucketName, a.getId()).toString());
 
                     as.add(a);
@@ -215,9 +222,9 @@ public class AwsClientController {
 
                 File convFile = new File(file.getOriginalFilename());
                 String ext = FilenameUtils.getExtension(convFile.getPath());
-                FileOutputStream fos = new FileOutputStream(convFile);
-                fos.write(file.getBytes());
-                fos.close();
+//                FileOutputStream fos = new FileOutputStream(convFile);
+//                fos.write(file.getBytes());
+//                fos.close();
 
                 if (ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg") || ext.equalsIgnoreCase("png")) {
                     System.out.println("File start" + file.getOriginalFilename());
@@ -231,14 +238,17 @@ public class AwsClientController {
 
                             AmazonS3 s3client = AmazonS3ClientBuilder
                                     .standard()
-                                    .withCredentials(credentialsProvider)
+                                  //  .withCredentials(credentialsProvider)
                                     .build();
 
                             String[] s = a.getUrl().split("/");
                             String x = s[s.length - 1];
                             System.out.println(x + "delete obj");
                             s3client.deleteObject(new DeleteObjectRequest(bucketName, x));
-                            s3client.putObject(new PutObjectRequest(bucketName, a.getId(), convFile).withCannedAcl(CannedAccessControlList.PublicRead));
+                           // s3client.putObject(new PutObjectRequest(bucketName, a.getId(), convFile).withCannedAcl(CannedAccessControlList.PublicRead));
+                            ObjectMetadata metadata= new ObjectMetadata();
+                            metadata.setContentType("image");
+                            s3client.putObject(new PutObjectRequest(bucketName, a.getId(), file.getInputStream(), metadata).withCannedAcl(CannedAccessControlList.PublicRead));
                             System.out.println("Amazon url" + s3client.getUrl(bucketName, a.getId()));
                             a.setUrl(s3client.getUrl(bucketName, a.getId()).toString());
 
@@ -309,7 +319,7 @@ public class AwsClientController {
 
                     AmazonS3 s3client = AmazonS3ClientBuilder
                             .standard()
-                            .withCredentials(credentialsProvider)
+                           // .withCredentials(credentialsProvider)
                             .build();
 
                     String[] s = a.getUrl().split("/");

@@ -19,7 +19,11 @@ public class Application extends SpringBootServletInitializer {
             SpringApplicationBuilder builder) {
         return builder.sources(Application.class);
     }
+
+
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
+
+
 }
