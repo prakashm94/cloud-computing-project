@@ -197,6 +197,9 @@
           {
             "Fn::Sub": "echo 'JAVA_OPTS=\"$JAVA_OPTS -Dbucket.name=${s3BucketTag}\"' >> /opt/tomcat/bin/setenv.sh"
           },
+          {
+            "Fn::Sub": "echo 'JAVA_OPTS=\"$JAVA_OPTS -Dcloud.aws.region.static=us-east-1\"' >> /opt/tomcat/bin/setenv.sh"
+          },
 
 
 
