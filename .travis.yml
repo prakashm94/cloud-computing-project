@@ -14,7 +14,7 @@ script:
   - gradle build
   - cd build/libs
   - ls -al
-  - cd ../../../..
+  - cd ../../..
   - pwd
   - ls -al
 
@@ -31,7 +31,7 @@ after_success:
   - cd webapp/CloudApp/build/libs
   - ls -al
   - cd ../../..
-  - zip -r csye6225-cloudapp.zip . -i webapp/CloudApp/build/libs/CloudApp.war *.sh *.yml
+  - zip -r csye6225-cloudapp.zip webapp/CloudApp/build/libs/CloudApp.war *.sh *.yml
   - ls -al
   - mv csye6225-cloudapp.zip codedeploy_artifact/
   - cd codedeploy_artifact
