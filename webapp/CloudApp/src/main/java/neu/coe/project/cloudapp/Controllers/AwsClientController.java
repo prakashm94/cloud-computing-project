@@ -90,9 +90,9 @@ public class AwsClientController {
             File convFile = new File(file.getOriginalFilename());
             String ext = FilenameUtils.getExtension(convFile.getPath());
             System.out.println("conv file: "+convFile.getPath()+"  ...."+ext);
-          //  FileOutputStream fos = new FileOutputStream(convFile);
-           // fos.write(file.getBytes());
-            //fos.close();
+            FileOutputStream fos = new FileOutputStream(convFile);
+            fos.write(file.getBytes());
+            fos.close();
             if (ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg") || ext.equalsIgnoreCase("png")){
                 if (t != null) {
                     if (t.getUserData().getUsername().equals(username))
