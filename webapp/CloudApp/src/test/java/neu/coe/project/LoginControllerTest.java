@@ -9,14 +9,14 @@ import static org.junit.Assert.assertTrue;
 
 public class LoginControllerTest {
 
-    @Test
-    public void testCheckPassword() {
-        LoginControllerTest tester = new LoginControllerTest(); // MyClass is tested
-        LoginController login= new LoginController();
-        // assert statements
-        assertTrue(login.checkPassword("gronk","$2a$17$idweww2syRAQ.aKNaz4FcuUDXaBIV4UWEXvLCyVFxIk8WWDXE1aUG"));
-        assertTrue(login.checkPassword("Edelman","$2a$17$KNoxVGMYHgIGsHAjTCQJa..InSp2o4NL.gYb95Fi65v3/V88Ua2nS"));
-    }
+//    @Test
+//    public void testCheckPassword() {
+//        LoginControllerTest tester = new LoginControllerTest(); // MyClass is tested
+//        LoginController login= new LoginController();
+//        // assert statements
+//        assertTrue(login.checkPassword("gronk","$2a$17$idweww2syRAQ.aKNaz4FcuUDXaBIV4UWEXvLCyVFxIk8WWDXE1aUG"));
+//        assertTrue(login.checkPassword("Edelman","$2a$17$KNoxVGMYHgIGsHAjTCQJa..InSp2o4NL.gYb95Fi65v3/V88Ua2nS"));
+//    }
    /* @Test
     public void testHashPassword() {
         LoginControllerTest tester = new LoginControllerTest(); // MyClass is tested
