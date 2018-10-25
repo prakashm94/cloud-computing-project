@@ -9,6 +9,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import neu.coe.project.cloudapp.Model.Attachment;
@@ -88,6 +89,7 @@ public class AwsClientController {
 
             TransactionData t = transactionController.getTransaction(transactionId);
             File convFile = new File(file.getOriginalFilename());
+
             String ext = FilenameUtils.getExtension(convFile.getPath());
             System.out.println("conv file: "+convFile.getPath()+"  ...."+ext);
 //            FileOutputStream fos = new FileOutputStream(convFile);
@@ -97,7 +99,6 @@ public class AwsClientController {
             byte[] bytes = file.getBytes();
             Path path = Paths.get("/opt/tomcat/webapps/CloudApp/" + a.getId() + "." + ext);
             Files.write(path, bytes);
-
             if (ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg") || ext.equalsIgnoreCase("png")){
                 if (t != null) {
                     if (t.getUserData().getUsername().equals(username))
@@ -111,8 +112,9 @@ public class AwsClientController {
                                 .standard()
                               //  .withCredentials(credentialsProvider)
                                 .build();
-
-                    s3client.putObject(new PutObjectRequest(bucketName, a.getId(), convFile).withCannedAcl(CannedAccessControlList.PublicRead));
+                        ObjectMetadata metadata= new ObjectMetadata();
+                        metadata.setContentType("image");
+                    s3client.putObject(new PutObjectRequest(bucketName, a.getId(), file.getInputStream(), metadata).withCannedAcl(CannedAccessControlList.PublicRead));
                     a.setUrl(s3client.getUrl(bucketName, a.getId()).toString());
 
                     as.add(a);
