@@ -49,8 +49,8 @@ public class AwsClientController {
 
     Map<String,String> map= new HashMap<String,String>();
 
-//    @Value("${cloud.aws.region.static")
-    @Value("${aws.s3.region}")
+    @Value("${cloud.aws.region.static")
+//    @Value("${aws.s3.region}")
     private String region;
 
     @Value("${aws.s3.bucketname}")
@@ -89,10 +89,10 @@ public class AwsClientController {
             TransactionData t = transactionController.getTransaction(transactionId);
             File convFile = new File(file.getOriginalFilename());
             String ext = FilenameUtils.getExtension(convFile.getPath());
-            FileOutputStream fos = new FileOutputStream(convFile);
-            fos.write(file.getBytes());
-            fos.close();
-
+            System.out.println("conv file: "+convFile.getPath()+"  ...."+ext);
+          //  FileOutputStream fos = new FileOutputStream(convFile);
+           // fos.write(file.getBytes());
+            //fos.close();
             if (ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg") || ext.equalsIgnoreCase("png")){
                 if (t != null) {
                     if (t.getUserData().getUsername().equals(username))
