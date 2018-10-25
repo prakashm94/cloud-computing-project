@@ -319,7 +319,7 @@ public class AwsClientController {
 
                     AmazonS3 s3client = AmazonS3ClientBuilder
                             .standard()
-                            .withCredentials(credentialsProvider)
+                           // .withCredentials(credentialsProvider)
                             .build();
 
                     String[] s = a.getUrl().split("/");
