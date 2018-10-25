@@ -17,7 +17,7 @@ echo $bucket_base_path$s3BucketTagValue
 aws s3 rm $bucket_base_path$s3BucketTagValue --recursive
 aws s3 rb $bucket_base_path$s3BucketTagValue --force
 
-aws cloudformation update-stack --stack-name $stack_name --template-body file://csye6225-cf-application-terminate.json --parameters ParameterKey=webSecurityGroupTag,ParameterValue=$webSecurityGroupTagValue ParameterKey=dbSecurityGroupTag,ParameterValue=$dbSecurityGroupTagValue ParameterKey=keyTag,ParameterValue=$keyTagValue ParameterKey=s3BucketTag,ParameterValue=$s3BucketTagValue ParameterKey=DBUSER,ParameterValue=$DBUSER ParameterKey=DBPWD,ParameterValue=$DBPWD
+aws cloudformation update-stack --stack-name $stack_name --template-body file://csye6225-cf-application-terminate.json  --capabilities CAPABILITY_NAMED_IAM --parameters ParameterKey=webSecurityGroupTag,ParameterValue=$webSecurityGroupTagValue ParameterKey=dbSecurityGroupTag,ParameterValue=$dbSecurityGroupTagValue ParameterKey=keyTag,ParameterValue=$keyTagValue ParameterKey=s3BucketTag,ParameterValue=$s3BucketTagValue ParameterKey=DBUSER,ParameterValue=$DBUSER ParameterKey=DBPWD,ParameterValue=$DBPWD
 
 aws cloudformation wait stack-update-complete --stack-name $stack_name
 echo "STACK UPDATED SUCCESSFULLY"
