@@ -30,7 +30,7 @@ after_success:
   - ls -al
   - cd webapp/CloudApp/build/libs
   - ls -al
-  - cd ../../..
+  - cd ../../../..
   - zip -r csye6225-cloudapp.zip webapp/CloudApp/build/libs/CloudApp.war *.sh *.yml
   - ls -al
   - mv csye6225-cloudapp.zip codedeploy_artifact/
