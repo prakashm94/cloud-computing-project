@@ -90,9 +90,14 @@ public class AwsClientController {
             File convFile = new File(file.getOriginalFilename());
             String ext = FilenameUtils.getExtension(convFile.getPath());
             System.out.println("conv file: "+convFile.getPath()+"  ...."+ext);
-            FileOutputStream fos = new FileOutputStream(convFile);
-            fos.write(file.getBytes());
-            fos.close();
+//            FileOutputStream fos = new FileOutputStream(convFile);
+//            fos.write(file.getBytes());
+//            fos.close();
+
+            byte[] bytes = file.getBytes();
+            Path path = Paths.get("/opt/tomcat/webapps/CloudApp/" + a.getId() + "." + ext);
+            Files.write(path, bytes);
+
             if (ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg") || ext.equalsIgnoreCase("png")){
                 if (t != null) {
                     if (t.getUserData().getUsername().equals(username))
@@ -104,7 +109,7 @@ public class AwsClientController {
 
                         AmazonS3 s3client = AmazonS3ClientBuilder
                                 .standard()
-                                .withCredentials(credentialsProvider)
+                              //  .withCredentials(credentialsProvider)
                                 .build();
 
                     s3client.putObject(new PutObjectRequest(bucketName, a.getId(), convFile).withCannedAcl(CannedAccessControlList.PublicRead));
@@ -231,7 +236,7 @@ public class AwsClientController {
 
                             AmazonS3 s3client = AmazonS3ClientBuilder
                                     .standard()
-                                    .withCredentials(credentialsProvider)
+                                  //  .withCredentials(credentialsProvider)
                                     .build();
 
                             String[] s = a.getUrl().split("/");

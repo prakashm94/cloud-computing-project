@@ -1,5 +1,29 @@
 {
-    "AWSTemplateFormatVersion": "2010-09-09",
+    "Parameters":{
+        "resource1" : {
+            "Type" : "String"
+        },
+        "resource2" : {
+            "Type" : "String"
+        },
+        "resource3" : {
+            "Type" : "String"
+        },
+        "resource4" : {
+            "Type" : "String"
+        },
+		"resource5" : {
+            "Type" : "String"
+        },
+		"domainName" : {
+            "Type" : "String"
+        },
+		"applicationName" : {
+            "Type" : "String"
+        }
+    },
+	
+	"AWSTemplateFormatVersion": "2010-09-09",
     "Resources": {
       "CodeDeployEC2ServiceRole": {
         "Type": "AWS::IAM::Role",
@@ -33,11 +57,13 @@
       {
           "Action": [
                   "s3:Get*",
-                  "s3:List*"
+                  "s3:List*",
+                  "s3:Put*",
+                  "s3:Delete*"
                 ],
 		  "Effect": "Allow",
           "Resource": [
-					"*"
+		"*"
                 ]
               }
             ]
@@ -133,9 +159,9 @@
                   "codedeploy:GetDeploymentConfig"
                 ],
                 "Resource": [
-                 "arn:aws:codedeploy:us-east-1:830173955131:deploymentconfig:CodeDeployDefault.OneAtATime",
-                 "arn:aws:codedeploy:us-east-1:830173955131:deploymentconfig:CodeDeployDefault.HalfAtATime",
-                 "arn:aws:codedeploy:us-east-1:830173955131:deploymentconfig:CodeDeployDefault.AllAtOnce"
+				  {"Ref" : "resource2"},
+                  {"Ref" : "resource3"},
+                  {"Ref" : "resource4"}
                 ]
               }
             ]
@@ -145,7 +171,7 @@
 	   "CodeDeployApplication": {
         "Type": "AWS::CodeDeploy::Application",
         "Properties": {
-          "ApplicationName": "csye6225-cloudapp"
+          "ApplicationName": {"Ref" : "applicationName"}
         }
       },
 	   "DeploymentGroup": {
@@ -178,7 +204,7 @@
 	  "s3Bucket": {
          "Type": "AWS::S3::Bucket",
          "Properties": {
-            "BucketName": "code-deploy.me"
+            "BucketName": {"Ref" : "domainName"}
          }
       }
 },
@@ -190,6 +216,7 @@
         "Name" : "csye6225-cicd-CodeDeployEC2ServiceRole"
       }
     }
- 	}
+
+	}
  
 }
