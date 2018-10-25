@@ -14,7 +14,7 @@ script:
   - gradle build
   - cd build/libs
   - ls -al
-  - cd ../../..
+  - cd ../../../..
   - pwd
   - ls -al
 
