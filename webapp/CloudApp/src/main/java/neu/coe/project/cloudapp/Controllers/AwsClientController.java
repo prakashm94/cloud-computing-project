@@ -222,9 +222,9 @@ public class AwsClientController {
 
                 File convFile = new File(file.getOriginalFilename());
                 String ext = FilenameUtils.getExtension(convFile.getPath());
-                FileOutputStream fos = new FileOutputStream(convFile);
-                fos.write(file.getBytes());
-                fos.close();
+//                FileOutputStream fos = new FileOutputStream(convFile);
+//                fos.write(file.getBytes());
+//                fos.close();
 
                 if (ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg") || ext.equalsIgnoreCase("png")) {
                     System.out.println("File start" + file.getOriginalFilename());
@@ -245,7 +245,10 @@ public class AwsClientController {
                             String x = s[s.length - 1];
                             System.out.println(x + "delete obj");
                             s3client.deleteObject(new DeleteObjectRequest(bucketName, x));
-                            s3client.putObject(new PutObjectRequest(bucketName, a.getId(), convFile).withCannedAcl(CannedAccessControlList.PublicRead));
+                           // s3client.putObject(new PutObjectRequest(bucketName, a.getId(), convFile).withCannedAcl(CannedAccessControlList.PublicRead));
+                            ObjectMetadata metadata= new ObjectMetadata();
+                            metadata.setContentType("image");
+                            s3client.putObject(new PutObjectRequest(bucketName, a.getId(), file.getInputStream(), metadata).withCannedAcl(CannedAccessControlList.PublicRead));
                             System.out.println("Amazon url" + s3client.getUrl(bucketName, a.getId()));
                             a.setUrl(s3client.getUrl(bucketName, a.getId()).toString());
 
