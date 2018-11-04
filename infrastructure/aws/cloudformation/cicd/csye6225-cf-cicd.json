@@ -28,6 +28,11 @@
       "CodeDeployEC2ServiceRole": {
         "Type": "AWS::IAM::Role",
         "Properties": {
+	  "ManagedPolicyArns": [
+          {"Ref": "CloudWatchLogPolicy"},
+	  "arn:aws:iam::aws:policy/AmazonS3FullAccess",
+	  "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
+          ],
           "AssumeRolePolicyDocument": {
             "Version": "2012-10-17",
             "Statement": [
@@ -206,17 +211,61 @@
          "Properties": {
             "BucketName": {"Ref" : "domainName"}
          }
-      }
+      },
+	"CloudWatchLogPolicy": {
+		"Type": "AWS::IAM::ManagedPolicy",
+		"Properties": {
+		"ManagedPolicyName": "CloudWatchPolicyName",
+		"PolicyDocument": {
+			"Version": "2012-10-17",
+			"Statement": [
+				{
+				"Effect": "Allow",
+				"Action": [
+					"logs:CreateLogGroup",
+					"logs:CreateLogStream",
+					"logs:PutLogEvents",
+					"logs:DescribeLogStreams"
+					],
+				"Resource": [
+					"arn:aws:logs:*:*:*"
+					]
+				}]
+				  }
+			}
+		},
+	"LambdaExecutionRole": {
+		"Type": "AWS::IAM::Role",
+		"Properties": {
+			"AssumeRolePolicyDocument": {
+				"Version": "2012-10-17",
+				"Statement": [{
+					"Effect": "Allow",
+					"Principal": {"Service": ["lambda.amazonaws.com"]},
+					"Action": ["sts:AssumeRole"]
+					    }]
+				},
+			"Path": "/",
+			"ManagedPolicyArns": [
+				"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+				"arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess",
+				"arn:aws:iam::aws:policy/AmazonSESFullAccess",
+				"arn:aws:iam::aws:policy/service-role/AWSLambdaDynamoDBExecutionRole"
+				],
+			"RoleName": "LambdaExecutionRole"
+			}
+        	}
 },
-"Outputs" : {
-    "servicerole" : {
-      "Description" : "The EC2 Service",
-      "Value" : {"Ref" : "CodeDeployEC2ServiceRole"},
-      "Export" : {
-        "Name" : "csye6225-cicd-CodeDeployEC2ServiceRole"
-      }
-    }
-
-	}
- 
+	"Outputs" : {
+	    "servicerole" : {
+		      "Description" : "The EC2 Service",
+		      "Value" : {"Ref" : "CodeDeployEC2ServiceRole"},
+		      "Export" : {"Name" : "csye6225-cicd-CodeDeployEC2ServiceRole"}
+    			},
+	    "lambdaexecutionrole" : {
+		      "Description" : "The Lambda Execution Service",
+		      "Value" : {"Ref" : "LambdaExecutionRole"},
+		      "Export" : {"Name" : "csye6225-cicd-LambdaExecutionRole"}
+    			}
+	   }
 }
