@@ -19,7 +19,10 @@
   },
     "s3BucketTag" : {
     "Type" : "String"
-    }
+    },
+    "TopicName": {
+      "Type": "String"
+     }
  },
  "Resources" : {
 	"CodeDeployEC2ServiceRoleInstanceProfile": {
@@ -46,6 +49,10 @@
             "KeyType" : "HASH"
           }
         ],
+	"TimeToLiveSpecification": {
+            "AttributeName": "ttl",
+            "Enabled": true
+       },
         "ProvisionedThroughput" : {
           "ReadCapacityUnits" : "5",
           "WriteCapacityUnits" : "5"
@@ -250,6 +257,12 @@
       "Properties" : {
         "BucketName" : {"Ref" : "s3BucketTag"}
       }
-   } 	
+   },
+   "mySNSTopic": {
+        "Type": "AWS::SNS::Topic",
+        "Properties": {
+          "TopicName": {"Ref": "TopicName"}
+        	}
+	      } 	
  }
 }
