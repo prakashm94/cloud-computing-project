@@ -1,5 +1,6 @@
 package neu.coe.project.cloudapp.Controllers;
 
+import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.sns.model.PublishResult;
 import neu.coe.project.cloudapp.Model.UserData;
 import neu.coe.project.cloudapp.Repository.UserDataRepository;
@@ -34,8 +35,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping
 public class LoginController {
     private static int workload = 17;
-    @Value("${aws.acccoutnId}") String accountId;
-    @Value("${aws.topicName}") String password_reset;
+    //@Value("${aws.acccoutnId}") String accountId;
+//    @Value("${aws.topicName}") String password_reset;
+    @Value("${cloud.aws.path}")
+    private String awsCredentialsPath;
 
     public String[] retrieveParameters(String authorization) {
         String[] values = {};
@@ -191,7 +194,13 @@ public class LoginController {
             Iterable<UserData> allusers = userDataRepository.findAll();
             for (UserData user : allusers) {
                 if (user.equals(username)) {
-                    AmazonSNSClient snsClient = new AmazonSNSClient();
+                    ProfileCredentialsProvider credentialsProvider
+                            = new ProfileCredentialsProvider(System.getenv(awsCredentialsPath));
+
+                    AmazonSNSClient snsClient = new AmazonSNSClient(credentialsProvider);
+
+                    //ProfileCredentialsProvider credentialsProvider
+                            //= new ProfileCredentialsProvider(System.getenv(awsCredentialsPath));
 //            AmazonSNSClient snsClient;
 //            snsClient= AmazonSNSClientBuilder
 //                    .standard()
@@ -200,7 +209,7 @@ public class LoginController {
 
                     JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("username", username);
-                    PublishRequest emailPublishRequest = new PublishRequest("accoundId" + accountId, ":" +password_reset, jsonObject.toString());
+                    PublishRequest emailPublishRequest = new PublishRequest("arn:aws:sns:us-east-1:119372720865:password_reset", jsonObject.toString());
                     PublishResult emailPublishResult = snsClient.publish(emailPublishRequest);
 
                     return ResponseEntity
