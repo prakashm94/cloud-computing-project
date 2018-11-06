@@ -5,22 +5,22 @@
    "webSecurityGroupTag" : {
    "Type" : "String"
   },
-	"dbSecurityGroupTag" : {
+  "dbSecurityGroupTag" : {
    "Type" : "String"
   },
-	"keyTag" : {
+  "keyTag" : {
    "Type" : "String"
   },
-"DBUSER" : {
+  "DBUSER" : {
    "Type" : "String"
   },
-"DBPWD" : {
+  "DBPWD" : {
    "Type" : "String"
   },
-    "s3BucketTag" : {
+  "s3BucketTag" : {
     "Type" : "String"
     },
-    "TopicName": {
+  "topicName": {
       "Type": "String"
      }
  },
@@ -29,10 +29,8 @@
 			"Type": "AWS::IAM::InstanceProfile",
 			"Properties": {
 				"Path": "/",
-				"Roles": [
-					{"Fn::ImportValue" : "csye6225-cicd-CodeDeployEC2ServiceRole"}
-				]
-			}
+				"Roles": [{"Fn::ImportValue" : "csye6225-cicd-CodeDeployEC2ServiceRole"}]
+				}
     },
     "DynamoDBTable" : {
       "Type" : "AWS::DynamoDB::Table",
@@ -252,17 +250,19 @@
         "VPCSecurityGroups" : [{"Ref": "dbSecurityGroup"}]
       }
    },
+    "MySNSTopic": {
+        "Type": "AWS::SNS::Topic",
+        "Properties": {
+          "TopicName": {
+            "Ref": "topicName"
+          }
+        }
+      },
    "s3Bucket" : {
       "Type" : "AWS::S3::Bucket",
       "Properties" : {
         "BucketName" : {"Ref" : "s3BucketTag"}
       }
-   },
-   "mySNSTopic": {
-        "Type": "AWS::SNS::Topic",
-        "Properties": {
-          "TopicName": {"Ref": "TopicName"}
-        	}
-	      } 	
+   } 	
  }
 }
