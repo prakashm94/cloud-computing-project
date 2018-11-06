@@ -5,23 +5,22 @@
    "webSecurityGroupTag" : {
    "Type" : "String"
   },
-	"dbSecurityGroupTag" : {
+  "dbSecurityGroupTag" : {
    "Type" : "String"
   },
-	"keyTag" : {
+  "keyTag" : {
    "Type" : "String"
   },
-"DBUSER" : {
+  "DBUSER" : {
    "Type" : "String"
   },
-"DBPWD" : {
+  "DBPWD" : {
    "Type" : "String"
   },
-    "s3BucketTag" : {
+  "s3BucketTag" : {
     "Type" : "String"
     },
-    
-    "LambdaFunctionName": {
+  "topicName": {
       "Type": "String"
      }
  },
@@ -251,24 +250,19 @@
         "VPCSecurityGroups" : [{"Ref": "dbSecurityGroup"}]
       }
    },
+    "MySNSTopic": {
+        "Type": "AWS::SNS::Topic",
+        "Properties": {
+          "TopicName": {
+            "Ref": "topicName"
+          }
+        }
+      },
    "s3Bucket" : {
       "Type" : "AWS::S3::Bucket",
       "Properties" : {
         "BucketName" : {"Ref" : "s3BucketTag"}
       }
-   },
-   "LambdaFunction": {
-     "Type": "AWS::Lambda::Function",
-     "Properties": {
-       "Code": {
-	      "S3Bucket": "code-deploy.csye6225-fall2018-shahvru.me",
-	      "S3Key": "*"
-    	      },
-       "Handler" : "LogEvent",
-       "Role": "arn:aws:iam::122418420360:role/LambdaExecutionRole",
-       "Runtime": "java8",
-       "Timeout": 25
-     }
    } 	
  }
 }

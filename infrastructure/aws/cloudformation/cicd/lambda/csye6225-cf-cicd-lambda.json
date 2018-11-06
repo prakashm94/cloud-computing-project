@@ -23,13 +23,7 @@
         },
 		"applicationNameLambda" : {
             "Type" : "String"
-        },
-		"resource6" : {
-            "Type" : "String"
-        },
-	"TopicName": {
-	      "Type": "String"
-	     }
+        }
     },
 	
 	"AWSTemplateFormatVersion": "2010-09-09",
@@ -40,7 +34,9 @@
 	  "ManagedPolicyArns": [
           {"Ref": "CloudWatchLogPolicy"},
 	  "arn:aws:iam::aws:policy/AmazonS3FullAccess",
-	  "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
+	  "arn:aws:iam::aws:policy/AmazonSNSFullAccess",
+	  "arn:aws:iam::aws:policy/CloudWatchAgentAdminPolicy",
+	  "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
           ],
           "AssumeRolePolicyDocument": {
             "Version": "2012-10-17",
@@ -267,22 +263,9 @@
               "CodeDeployServiceRole",
               "Arn"
             ]
-          },
-	"TriggerConfigurations": [
-          {
-            "TriggerEvents": ["DeploymentSuccess","DeploymentRollback"],
-            "TriggerName": "MyTargetLambda",
-            "TriggerTargetArn": {"Ref" : "resource6"}
           }
-        ]
         }
       },
-	"mySNSTopic": {
-        	"Type": "AWS::SNS::Topic",
-        	"Properties": {
-        	  "TopicName": {"Ref": "TopicName"}
-        	}
-	      },
 	  "s3Bucket": {
          "Type": "AWS::S3::Bucket",
          "Properties": {

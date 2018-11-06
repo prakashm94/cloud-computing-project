@@ -5,8 +5,7 @@ keyTagValue=$2
 s3BucketTagValue=$3
 DBUSER=$4
 DBPWD=$5
-snsTopicName=$6
-lambdaFunctionName=$7
+topicName=$6
 
 echo $stack_name
 
@@ -20,7 +19,7 @@ echo $bucket_base_path$s3BucketTagValue
 aws s3 rm $bucket_base_path$s3BucketTagValue --recursive
 aws s3 rb $bucket_base_path$s3BucketTagValue --force
 
-aws cloudformation update-stack --stack-name $stack_name --template-body file://csye6225-cf-application-terminate-with-lambda.json  --capabilities CAPABILITY_NAMED_IAM --parameters ParameterKey=webSecurityGroupTag,ParameterValue=$webSecurityGroupTagValue ParameterKey=dbSecurityGroupTag,ParameterValue=$dbSecurityGroupTagValue ParameterKey=keyTag,ParameterValue=$keyTagValue ParameterKey=s3BucketTag,ParameterValue=$s3BucketTagValue ParameterKey=DBUSER,ParameterValue=$DBUSER ParameterKey=DBPWD,ParameterValue=$DBPWD ParameterKey=TopicName,ParameterValue=$snsTopicName ParameterKey=LambdaFunctionName,ParameterValue=$lambdaFunctionName
+aws cloudformation update-stack --stack-name $stack_name --template-body file://csye6225-cf-application-terminate-with-lambda.json  --capabilities CAPABILITY_NAMED_IAM --parameters ParameterKey=webSecurityGroupTag,ParameterValue=$webSecurityGroupTagValue ParameterKey=dbSecurityGroupTag,ParameterValue=$dbSecurityGroupTagValue ParameterKey=keyTag,ParameterValue=$keyTagValue ParameterKey=s3BucketTag,ParameterValue=$s3BucketTagValue ParameterKey=DBUSER,ParameterValue=$DBUSER ParameterKey=DBPWD,ParameterValue=$DBPWD ParameterKey=topicName,ParameterValue=$topicName
 
 aws cloudformation wait stack-update-complete --stack-name $stack_name
 echo "STACK UPDATED SUCCESSFULLY"
