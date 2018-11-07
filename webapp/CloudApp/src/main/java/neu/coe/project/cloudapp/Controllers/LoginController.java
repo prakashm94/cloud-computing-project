@@ -1,9 +1,14 @@
 package neu.coe.project.cloudapp.Controllers;
 
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.EnvironmentVariableCredentialsProvider;
+import com.amazonaws.auth.profile.ProfileCredentialsProvider;
+import com.amazonaws.services.sns.model.PublishResult;
 import neu.coe.project.cloudapp.Model.UserData;
 import neu.coe.project.cloudapp.Repository.UserDataRepository;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +18,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+//import com.google.gson.JsonObject;
+//import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+//import com.amazonaws.services.dynamodbv2.datamodeling.*;
+//import com.amazonaws.services.sns.AmazonSNSClient;
+import com.amazonaws.services.sns.AmazonSNSClient;
+import com.amazonaws.services.sns.model.PublishRequest;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
@@ -27,7 +37,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping
 public class LoginController {
     private static int workload = 17;
-
+    //@Value("${aws.acccoutnId}") String accountId;
+//    @Value("${aws.topicName}") String password_reset;
+    @Value("${cloud.aws.path}")
+    private String awsCredentialsPath;
 
     public String[] retrieveParameters(String authorization) {
         String[] values = {};
@@ -165,6 +178,56 @@ public class LoginController {
     Iterable<UserData> getAllUsers() {
         // This returns a JSON or XML with the users
         return userDataRepository.findAll();
+    }
+
+    @RequestMapping(path="user/reset",method=POST)
+    public @ResponseBody
+    ResponseEntity<String> resetPassword (@RequestHeader HttpHeaders httpRequest) {
+
+        final String authorization = httpRequest.getFirst("Authorization");
+
+        String[] values = retrieveParameters(authorization);
+        String username = values[0];
+        String password = values[1];
+        Map<String, String> map = new HashMap<String, String>();
+
+        if (isValidEmailAddress(username)) {
+
+            Iterable<UserData> allusers = userDataRepository.findAll();
+            for (UserData user : allusers) {
+                if (user.getUsername().equalsIgnoreCase(username)) {
+                    //AWSCredentials credentialsProvider
+                      //      = new  EnvironmentVariableCredentialsProvider().getCredentials();
+                    AmazonSNSClient snsClient = new AmazonSNSClient();
+
+
+                    //JSONObject jsonObject = new JSONObject();
+                    //jsonObject.addProperty("username", username);
+
+                    //jsonObject.put("username", username);
+                    PublishRequest emailPublishRequest = new PublishRequest("arn:aws:sns:us-east-1:119372720865:password_reset", username);
+                    PublishResult emailPublishResult = snsClient.publish(emailPublishRequest);
+
+                    return ResponseEntity
+                            .status(HttpStatus.OK)
+                            .body("message published successfully");
+                } else {
+                    return ResponseEntity
+                            .status(HttpStatus.BAD_REQUEST)
+                            .body("invalid user");
+                }
+            }
+        }
+
+        else{
+//                map.put("message", "Username already exists");
+//                return new JSONObject(map).toString();
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("not a valid user");
+        }
+
+        return null;
     }
 
     public String hashPassword(String password_plaintext) {

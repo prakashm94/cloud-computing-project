@@ -108,6 +108,8 @@ public class AwsClientController {
                         ProfileCredentialsProvider credentialsProvider
                                 = new ProfileCredentialsProvider(System.getenv(awsCredentialsPath));
 
+
+
                         AmazonS3 s3client = AmazonS3ClientBuilder
                                 .standard()
                               //  .withCredentials(credentialsProvider)
