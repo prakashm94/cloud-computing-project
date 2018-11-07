@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.google.gson.JsonObject;
+//import com.google.gson.JsonObject;
 //import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 //import com.amazonaws.services.dynamodbv2.datamodeling.*;
 //import com.amazonaws.services.sns.AmazonSNSClient;
@@ -208,8 +208,10 @@ public class LoginController {
 //                    .withCredentials(new AWSStaticCredentialsProvider())
 //                    .build();
 
-                    JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("username", username);
+                    JSONObject jsonObject = new JSONObject();
+                    //jsonObject.addProperty("username", username);
+
+                    jsonObject.put("username", username);
                     PublishRequest emailPublishRequest = new PublishRequest("arn:aws:sns:us-east-1:119372720865:password_reset", jsonObject.toString());
                     PublishResult emailPublishResult = snsClient.publish(emailPublishRequest);
 
