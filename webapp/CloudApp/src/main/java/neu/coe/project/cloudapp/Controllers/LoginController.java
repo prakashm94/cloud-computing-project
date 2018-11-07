@@ -196,9 +196,9 @@ public class LoginController {
             Iterable<UserData> allusers = userDataRepository.findAll();
             for (UserData user : allusers) {
                 if (user.getUsername().equalsIgnoreCase(username)) {
-                    AWSCredentials credentialsProvider
-                            = new  EnvironmentVariableCredentialsProvider().getCredentials();
-                    AmazonSNSClient snsClient = new AmazonSNSClient(credentialsProvider);
+                    //AWSCredentials credentialsProvider
+                      //      = new  EnvironmentVariableCredentialsProvider().getCredentials();
+                    AmazonSNSClient snsClient = new AmazonSNSClient();
 
                     //ProfileCredentialsProvider credentialsProvider
                             //= new ProfileCredentialsProvider(System.getenv(awsCredentialsPath));
