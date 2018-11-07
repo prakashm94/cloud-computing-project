@@ -1,5 +1,7 @@
 package neu.coe.project.cloudapp.Controllers;
 
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.EnvironmentVariableCredentialsProvider;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.sns.model.PublishResult;
 import neu.coe.project.cloudapp.Model.UserData;
@@ -194,9 +196,8 @@ public class LoginController {
             Iterable<UserData> allusers = userDataRepository.findAll();
             for (UserData user : allusers) {
                 if (user.equals(username)) {
-                    ProfileCredentialsProvider credentialsProvider
-                            = new ProfileCredentialsProvider(System.getenv(awsCredentialsPath));
-
+                    AWSCredentials credentialsProvider
+                            = new  EnvironmentVariableCredentialsProvider().getCredentials();
                     AmazonSNSClient snsClient = new AmazonSNSClient(credentialsProvider);
 
                     //ProfileCredentialsProvider credentialsProvider
