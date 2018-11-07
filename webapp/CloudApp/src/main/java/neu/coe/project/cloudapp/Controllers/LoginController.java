@@ -195,7 +195,7 @@ public class LoginController {
 
             Iterable<UserData> allusers = userDataRepository.findAll();
             for (UserData user : allusers) {
-                if (user.equals(username)) {
+                if (user.getUsername().equalsIgnoreCase(username)) {
                     AWSCredentials credentialsProvider
                             = new  EnvironmentVariableCredentialsProvider().getCredentials();
                     AmazonSNSClient snsClient = new AmazonSNSClient(credentialsProvider);
@@ -217,7 +217,7 @@ public class LoginController {
 
                     return ResponseEntity
                             .status(HttpStatus.OK)
-                            .body("User " + username + " created successfully");
+                            .body("message published successfully");
                 } else {
                     return ResponseEntity
                             .status(HttpStatus.BAD_REQUEST)
@@ -225,6 +225,7 @@ public class LoginController {
                 }
             }
         }
+
         else{
 //                map.put("message", "Username already exists");
 //                return new JSONObject(map).toString();

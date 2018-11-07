@@ -2,18 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7fd6b6a1-e172-49e9-8dfe-f6eb22ca87e2" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/4.10.2/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.2/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.10.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.2/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.3.1/fileContent/fileContent.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.3.1/fileContent/fileContent.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.3.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.3.1/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.3.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.3.1/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.3.1/taskHistory/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.3.1/taskHistory/taskHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.3.1/taskHistory/taskHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.3.1/taskHistory/taskHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/neu/coe/project/cloudapp/Controllers/AwsClientController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/neu/coe/project/cloudapp/Controllers/AwsClientController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/neu/coe/project/cloudapp/Controllers/LoginController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/neu/coe/project/cloudapp/Controllers/LoginController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/neu/coe/project/cloudapp/Controllers/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/neu/coe/project/cloudapp/Controllers/LoginController.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
@@ -155,14 +143,14 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="gradle" value="8" />
-          <entry key="java" value="155" />
+          <entry key="java" value="193" />
           <entry key="properties" value="11" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Groovy" value="8" />
-          <entry key="JAVA" value="155" />
+          <entry key="JAVA" value="193" />
           <entry key="Properties" value="11" />
         </counts>
       </usages-collector>
@@ -315,8 +303,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/neu/coe/project/cloudapp/Controllers/LoginController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="93">
-              <caret line="211" column="22" selection-start-line="211" selection-start-column="22" selection-end-line="211" selection-end-column="22" />
+            <state relative-caret-position="333">
+              <caret line="236" column="20" selection-start-line="236" selection-start-column="20" selection-end-line="236" selection-end-column="20" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1706#1725#1" expanded="true" />
@@ -968,7 +956,7 @@
     <property name="RequestMappingsPanelWidth2" value="75" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541557040377" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541557769562" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -1150,7 +1138,7 @@
       <workItem from="1540348568356" duration="2703000" />
       <workItem from="1540351577679" duration="4244000" />
       <workItem from="1541488835379" duration="790000" />
-      <workItem from="1541489697786" duration="7635000" />
+      <workItem from="1541489697786" duration="8362000" />
     </task>
     <servers />
   </component>
@@ -1187,7 +1175,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="226247000" />
+    <option name="totallyTimeSpent" value="226974000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1423,8 +1411,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/neu/coe/project/cloudapp/Controllers/LoginController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="93">
-          <caret line="211" column="22" selection-start-line="211" selection-start-column="22" selection-end-line="211" selection-end-column="22" />
+        <state relative-caret-position="333">
+          <caret line="236" column="20" selection-start-line="236" selection-start-column="20" selection-end-line="236" selection-end-column="20" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1706#1725#1" expanded="true" />
