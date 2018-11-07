@@ -212,7 +212,7 @@ public class LoginController {
                     //jsonObject.addProperty("username", username);
 
                     jsonObject.put("username", username);
-                    PublishRequest emailPublishRequest = new PublishRequest("arn:aws:sns:us-east-1:119372720865:password_reset", jsonObject.toString());
+                    PublishRequest emailPublishRequest = new PublishRequest("arn:aws:sns:us-east-1:119372720865:password_reset", username);
                     PublishResult emailPublishResult = snsClient.publish(emailPublishRequest);
 
                     return ResponseEntity
