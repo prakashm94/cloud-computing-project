@@ -143,14 +143,14 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="gradle" value="8" />
-          <entry key="java" value="197" />
+          <entry key="java" value="203" />
           <entry key="properties" value="11" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Groovy" value="8" />
-          <entry key="JAVA" value="197" />
+          <entry key="JAVA" value="203" />
           <entry key="Properties" value="11" />
         </counts>
       </usages-collector>
@@ -303,8 +303,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/neu/coe/project/cloudapp/Controllers/LoginController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="267">
-              <caret line="214" column="137" selection-start-line="214" selection-start-column="137" selection-end-line="214" selection-end-column="137" />
+            <state relative-caret-position="252">
+              <caret line="213" column="22" selection-start-line="213" selection-start-column="22" selection-end-line="213" selection-end-column="22" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1706#1725#1" expanded="true" />
@@ -956,7 +956,7 @@
     <property name="RequestMappingsPanelWidth2" value="75" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541559618564" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541559952561" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -1138,7 +1138,7 @@
       <workItem from="1540348568356" duration="2703000" />
       <workItem from="1540351577679" duration="4244000" />
       <workItem from="1541488835379" duration="790000" />
-      <workItem from="1541489697786" duration="9523000" />
+      <workItem from="1541489697786" duration="9857000" />
     </task>
     <servers />
   </component>
@@ -1175,7 +1175,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="228135000" />
+    <option name="totallyTimeSpent" value="228469000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1411,8 +1411,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/neu/coe/project/cloudapp/Controllers/LoginController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="214" column="137" selection-start-line="214" selection-start-column="137" selection-end-line="214" selection-end-column="137" />
+        <state relative-caret-position="252">
+          <caret line="213" column="22" selection-start-line="213" selection-start-column="22" selection-end-line="213" selection-end-column="22" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1706#1725#1" expanded="true" />

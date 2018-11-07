@@ -200,18 +200,11 @@ public class LoginController {
                       //      = new  EnvironmentVariableCredentialsProvider().getCredentials();
                     AmazonSNSClient snsClient = new AmazonSNSClient();
 
-                    //ProfileCredentialsProvider credentialsProvider
-                            //= new ProfileCredentialsProvider(System.getenv(awsCredentialsPath));
-//            AmazonSNSClient snsClient;
-//            snsClient= AmazonSNSClientBuilder
-//                    .standard()
-//                    .withCredentials(new AWSStaticCredentialsProvider())
-//                    .build();
 
-                    JSONObject jsonObject = new JSONObject();
+                    //JSONObject jsonObject = new JSONObject();
                     //jsonObject.addProperty("username", username);
 
-                    jsonObject.put("username", username);
+                    //jsonObject.put("username", username);
                     PublishRequest emailPublishRequest = new PublishRequest("arn:aws:sns:us-east-1:119372720865:password_reset", username);
                     PublishResult emailPublishResult = snsClient.publish(emailPublishRequest);
 
