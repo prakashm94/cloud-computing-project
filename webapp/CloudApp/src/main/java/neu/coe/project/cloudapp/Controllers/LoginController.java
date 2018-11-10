@@ -188,13 +188,13 @@ public class LoginController {
 
         String[] values = retrieveParameters(authorization);
         String username = values[0];
-        String password = values[1];
         Map<String, String> map = new HashMap<String, String>();
 
         if (isValidEmailAddress(username)) {
 
             Iterable<UserData> allusers = userDataRepository.findAll();
             for (UserData user : allusers) {
+
                 if (user.getUsername().equalsIgnoreCase(username)) {
                     //AWSCredentials credentialsProvider
                       //      = new  EnvironmentVariableCredentialsProvider().getCredentials();
@@ -211,11 +211,7 @@ public class LoginController {
                     return ResponseEntity
                             .status(HttpStatus.OK)
                             .body("message published successfully");
-                } else {
-                    return ResponseEntity
-                            .status(HttpStatus.BAD_REQUEST)
-                            .body("invalid user");
-                }
+                } 
             }
         }
 

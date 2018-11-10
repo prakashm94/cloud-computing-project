@@ -2,26 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7fd6b6a1-e172-49e9-8dfe-f6eb22ca87e2" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../.gradle/4.3.1/fileChanges/last-build.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.gradle/4.3.1/fileHashes/fileHashes.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.gradle/4.3.1/taskHistory/taskHistory.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.gradle/4.3.1/taskHistory/taskHistory.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.gradle/buildOutputCleanup/cache.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CloudApp.iml" beforeDir="false" afterPath="$PROJECT_DIR$/CloudApp.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/neu/coe/project/cloudapp/Application.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/neu/coe/project/cloudapp/Controllers/AwsClientController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/neu/coe/project/cloudapp/Controllers/LocalAttachmentController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/neu/coe/project/cloudapp/Controllers/LoginController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/neu/coe/project/cloudapp/Controllers/TransactionController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/neu/coe/project/cloudapp/Model/Attachment.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/neu/coe/project/cloudapp/Model/TransactionData.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/neu/coe/project/cloudapp/Model/UserData.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/neu/coe/project/cloudapp/Repository/AttachmentRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/neu/coe/project/cloudapp/Repository/TransactionDataRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/neu/coe/project/cloudapp/Repository/UserDataRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/test/classes/neu/coe/project/LoginControllerTest.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/neu/coe/project/cloudapp/Controllers/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/neu/coe/project/cloudapp/Controllers/LoginController.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
@@ -120,7 +100,7 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="gradle" value="8" />
-          <entry key="java" value="676" />
+          <entry key="java" value="683" />
           <entry key="properties" value="163" />
           <entry key="xml" value="3" />
         </counts>
@@ -128,7 +108,7 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Groovy" value="8" />
-          <entry key="JAVA" value="676" />
+          <entry key="JAVA" value="683" />
           <entry key="Properties" value="163" />
           <entry key="XML" value="3" />
         </counts>
@@ -325,8 +305,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/neu/coe/project/cloudapp/Controllers/LoginController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2417">
-              <caret line="31" column="21" lean-forward="true" selection-start-line="31" selection-start-column="21" selection-end-line="31" selection-end-column="21" />
+            <state relative-caret-position="358">
+              <caret line="213" column="18" selection-start-line="213" selection-start-column="18" selection-end-line="213" selection-end-column="18" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -885,7 +868,7 @@
       </MavenImportingSettings>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
+  <component name="ProjectFrameBounds">
     <option name="width" value="1440" />
     <option name="height" value="753" />
   </component>
@@ -993,7 +976,7 @@
     <property name="RequestMappingsPanelWidth2" value="75" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541559952561" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541830198631" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -1178,7 +1161,7 @@
       <workItem from="1541489697786" duration="9857000" />
       <workItem from="1541736326088" duration="153000" />
       <workItem from="1541736538530" duration="489000" />
-      <workItem from="1541826877433" duration="1137000" />
+      <workItem from="1541826877433" duration="3142000" />
     </task>
     <servers />
   </component>
@@ -1215,7 +1198,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="230248000" />
+    <option name="totallyTimeSpent" value="232253000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1227,7 +1210,8 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1440" height="753" extended-state="1" />
+    <frame x="0" y="0" width="1440" height="753" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4989429" visible="true" weight="0.20301291" />
       <window_info id="Structure" order="1" sideWeight="0.50070924" side_tool="true" weight="0.24966443" />
@@ -1450,8 +1434,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/neu/coe/project/cloudapp/Controllers/LoginController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2417">
-          <caret line="31" column="21" lean-forward="true" selection-start-line="31" selection-start-column="21" selection-end-line="31" selection-end-column="21" />
+        <state relative-caret-position="358">
+          <caret line="213" column="18" selection-start-line="213" selection-start-column="18" selection-end-line="213" selection-end-column="18" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
