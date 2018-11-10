@@ -30,6 +30,9 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -41,6 +44,23 @@ public class LoginController {
 //    @Value("${aws.topicName}") String password_reset;
     @Value("${cloud.aws.path}")
     private String awsCredentialsPath;
+    Logger logger = Logger.getLogger("MyLog");
+    FileHandler fh;
+
+    LoginController() {
+        try {
+            fh = new FileHandler("/opt/tomcat/logs/csye6225.log");
+            logger.addHandler(fh);
+            SimpleFormatter formatter = new SimpleFormatter();
+            fh.setFormatter(formatter);
+
+            // the following statement is used to log any messages
+            logger.info("My first log");
+        }
+catch(Exception e){
+    logger.info("Exception");
+}
+    }
 
     public String[] retrieveParameters(String authorization) {
         String[] values = {};
@@ -183,7 +203,7 @@ public class LoginController {
     @RequestMapping(path="user/reset",method=POST)
     public @ResponseBody
     ResponseEntity<String> resetPassword (@RequestHeader HttpHeaders httpRequest) {
-
+        logger.info("Reset password called:");
         final String authorization = httpRequest.getFirst("Authorization");
 
         String[] values = retrieveParameters(authorization);
@@ -207,11 +227,11 @@ public class LoginController {
                     //jsonObject.put("username", username);
                     PublishRequest emailPublishRequest = new PublishRequest("arn:aws:sns:us-east-1:830173955131:password_reset", username);
                     PublishResult emailPublishResult = snsClient.publish(emailPublishRequest);
-
+                    logger.info("topic published");
                     return ResponseEntity
                             .status(HttpStatus.OK)
                             .body("message published successfully");
-                } 
+                }
             }
         }
 
