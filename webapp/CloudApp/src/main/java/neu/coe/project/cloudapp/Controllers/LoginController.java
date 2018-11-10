@@ -47,7 +47,7 @@ public class LoginController {
     Logger logger = Logger.getLogger("MyLog");
     FileHandler fh;
 
-    LoginController() {
+    public LoginController() {
         try {
             fh = new FileHandler("/opt/tomcat/logs/csye6225.log");
             logger.addHandler(fh);
@@ -243,7 +243,9 @@ catch(Exception e){
                     .body("not a valid user");
         }
 
-        return null;
+          return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body("Please check your request");
     }
 
     public String hashPassword(String password_plaintext) {
