@@ -5,34 +5,32 @@
    "webSecurityGroupTag" : {
    "Type" : "String"
   },
-	"dbSecurityGroupTag" : {
+  "dbSecurityGroupTag" : {
    "Type" : "String"
   },
-	"keyTag" : {
+  "keyTag" : {
    "Type" : "String"
   },
-"DBUSER" : {
+  "DBUSER" : {
    "Type" : "String"
   },
-"DBPWD" : {
+  "DBPWD" : {
    "Type" : "String"
   },
-    "s3BucketTag" : {
+  "s3BucketCloud" : {
     "Type" : "String"
     },
-    "TopicName": {
-      "Type": "String"
-     }
+  "s3BucketLambda" : {
+    "Type" : "String"
+    }
  },
  "Resources" : {
 	"CodeDeployEC2ServiceRoleInstanceProfile": {
 			"Type": "AWS::IAM::InstanceProfile",
 			"Properties": {
 				"Path": "/",
-				"Roles": [
-					{"Fn::ImportValue" : "csye6225-cicd-CodeDeployEC2ServiceRole"}
-				]
-			}
+				"Roles": [{"Fn::ImportValue" : "csye6225-cicd-CodeDeployEC2ServiceRole"}]
+				}
     },
     "DynamoDBTable" : {
       "Type" : "AWS::DynamoDB::Table",
@@ -193,7 +191,6 @@
                     "systemctl enable tomcat.service",
                     "systemctl start tomcat.service",
                     "echo 'everything success'",
-                
                 "echo '#!/bin/sh' >> /opt/tomcat/bin/setenv.sh ",
           {
             "Fn::Sub": "sudo echo \"JAVA_OPTS=\\\"\\$JAVA_OPTS -Dspring.profiles.active=dev\\\"\" >> /opt/tomcat/bin/setenv.sh"
@@ -208,17 +205,33 @@
             "Fn::Sub": "echo 'JAVA_OPTS=\"$JAVA_OPTS -Dspring.datasource.password=${DBPWD}\"' >> /opt/tomcat/bin/setenv.sh"
           },
           {
-            "Fn::Sub": "echo 'JAVA_OPTS=\"$JAVA_OPTS -Daws.s3.bucketname=${s3BucketTag}\"' >> /opt/tomcat/bin/setenv.sh"
+            "Fn::Sub": "echo 'JAVA_OPTS=\"$JAVA_OPTS -Daws.s3.bucketname=${s3BucketCloud}\"' >> /opt/tomcat/bin/setenv.sh"
           },
           {
             "Fn::Sub": "echo 'JAVA_OPTS=\"$JAVA_OPTS -Dcloud.aws.region.static=us-east-1\"' >> /opt/tomcat/bin/setenv.sh"
           },
-
-
-
-            "chmod +x /opt/tomcat/bin/setenv.sh",
-         "chown tomcat:tomcat /opt/tomcat/bin/setenv.sh",
+          "chmod +x /opt/tomcat/bin/setenv.sh",
+          "chown tomcat:tomcat /opt/tomcat/bin/setenv.sh",
                 "sudo service tomcat restart ",
+                "sudo touch /opt/cloudwatch-config.json",
+                "cd ../../../../..",
+                "cd /opt",
+                "#sudo echo '{' > cloudwatch-config.json",
+                "sudo echo '{\"agent\":{' >> cloudwatch-config.json",
+                "sudo echo '\"metrics_collection_interval\":10,' >> cloudwatch-config.json",
+                "sudo echo '\"logfile\": \"/var/logs/amazon-cloudwatch-agent.log\"' >> cloudwatch-config.json",
+                "sudo echo '},' >> cloudwatch-config.json",
+                "sudo echo '\"logs\": {\"logs_collected\": {\"files\": {\"collect_list\": [{\"file_path\": \"/opt/tomcat/logs/csye6225.log\",\"log_group_name\": \"csye6225_fall2018\",\"log_stream_name\": \"webapp\"}]}},\"log_stream_name\": \"cloudwatch_log_stream\"}}' >> cloudwatch-config.json",
+
+                "cd ..",
+                "sudo wget https://s3.amazonaws.com/amazoncloudwatch-agent/centos/amd64/latest/amazon-cloudwatch-agent.rpm",
+               "sudo rpm -U ./amazon-cloudwatch-agent.rpm",
+               "sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/cloudwatch-config.json -s",     
+               "cd ../../../../..",
+               "sudo wget https://s3.amazonaws.com/configfileforcloudwatch/amazon-cloudwatch-agent.service",
+               "sudo cp amazon-cloudwatch-agent.service /usr/lib/systemd/system/",
+               "sudo systemctl enable amazon-cloudwatch-agent.service",
+               "sudo systemctl start amazon-cloudwatch-agent.service",
                 "echo 'successful'"
               ]
             ]
@@ -255,14 +268,23 @@
    "s3Bucket" : {
       "Type" : "AWS::S3::Bucket",
       "Properties" : {
-        "BucketName" : {"Ref" : "s3BucketTag"}
+        "BucketName" : {"Ref" : "s3BucketCloud"}
       }
    },
-   "mySNSTopic": {
-        "Type": "AWS::SNS::Topic",
-        "Properties": {
-          "TopicName": {"Ref": "TopicName"}
-        	}
-	      } 	
- }
+   "s3BucketLambdaExport" : {
+      "Type" : "AWS::S3::Bucket",
+      "Properties" : {
+        "BucketName" : {"Ref" : "s3BucketLambda"}
+      }
+   } 	 	
+ },
+
+  "Outputs" : {
+    "s3BucketLambda" : {
+      "Description" : "The EC2 Service",
+      "Value" : {"Ref" : "s3BucketLambdaExport"},
+      "Export" : {"Name" : "csye6225-fall2018-s3lambda"}
+ 		}
+	   }
+
 }

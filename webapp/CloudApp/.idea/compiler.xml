@@ -10,7 +10,6 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="CloudApp" target="1.8" />
       <module name="CloudApp_main" target="1.8" />
       <module name="CloudApp_test" target="1.8" />
     </bytecodeTargetLevel>

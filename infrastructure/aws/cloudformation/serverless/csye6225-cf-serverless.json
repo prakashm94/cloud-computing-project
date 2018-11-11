@@ -1,0 +1,36 @@
+{
+ "AWSTemplateFormatVersion" : "2010-09-09",
+ "Description":"Creating ",
+ "Parameters": {
+  "resource1" : {
+   "Type" : "String"
+  }
+ },
+ "Resources" : {
+   "LambdaFunction": {
+     "Type": "AWS::Lambda::Function",
+     "Properties": {
+       "Code": {
+	      "S3Bucket": {"Fn::ImportValue" : "csye6225-fall2018-s3lambda"},
+	      "S3Key": "lambdaapp.zip"
+    	      },
+       "Handler" : "LogEvent",
+       "Role": {"Ref": "resource1"},
+       "Runtime": "java8",
+       "Timeout": 20
+     	}
+     },
+
+   "MySnsSubscription": {
+     "Type" : "AWS::SNS::Subscription",
+     "DependsOn": "LambdaFunction",
+     "Properties" : {
+	"Protocol" : "lambda",
+        "Endpoint" : {"Fn::GetAtt" : ["LambdaFunction", "Arn"]},    
+       "TopicArn" : {"Fn::ImportValue" : "csye6225-fall2018-snstopiclambda"}
+  	}
+    }
+
+	
+ }
+}
