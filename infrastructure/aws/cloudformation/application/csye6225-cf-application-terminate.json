@@ -22,7 +22,10 @@
     },
   "s3BucketLambda" : {
     "Type" : "String"
-    }
+    },
+  "topicName": {
+      "Type": "String"
+     }
  },
  "Resources" : {
 	"CodeDeployEC2ServiceRoleInstanceProfile": {
@@ -276,14 +279,26 @@
       "Properties" : {
         "BucketName" : {"Ref" : "s3BucketLambda"}
       }
-   } 	 	
+   },
+   "snsTopicLambda": {
+        "Type": "AWS::SNS::Topic",
+        "Properties": {
+          "TopicName": {"Ref": "topicName"}
+             }
+        } 	 	
  },
 
   "Outputs" : {
     "s3BucketLambda" : {
-      "Description" : "The EC2 Service",
+      "Description" : "The S3 Lambda Bucket.",
       "Value" : {"Ref" : "s3BucketLambdaExport"},
       "Export" : {"Name" : "csye6225-fall2018-s3lambda"}
+ 		},   
+
+    "snsTopicLambda" : {
+      "Description" : "The SNS Topic Lambda.",
+      "Value" : {"Ref" : "snsTopicLambda"},
+      "Export" : {"Name" : "csye6225-fall2018-snstopiclambda"}
  		}
 	   }
 

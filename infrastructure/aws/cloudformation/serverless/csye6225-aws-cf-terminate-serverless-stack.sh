@@ -1,8 +1,8 @@
 #!/bin/bash
 echo "Updating Stack To Delete"
 stack_name=$1
-topicName=$2
-applicationNameLambda=$3
+#topicName=$2
+#applicationNameLambda=$3
 
 echo $stack_name
 
