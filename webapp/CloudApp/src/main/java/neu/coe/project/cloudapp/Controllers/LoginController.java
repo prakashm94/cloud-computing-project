@@ -44,6 +44,11 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping
 public class LoginController {
     private static int workload = 17;
+    private static int post=0;
+    private static int put=0;
+    private static int delete=0;
+    private static int get=0;
+    private static int reset=0;
     //@Value("${aws.acccoutnId}") String accountId;
 //    @Value("${aws.topicName}") String password_reset;
     @Value("${cloud.aws.path}")
@@ -160,7 +165,7 @@ catch(Exception e){
     public @ResponseBody
     ResponseEntity<String> addNewUser(@RequestHeader HttpHeaders httpRequest) {
         final String authorization = httpRequest.getFirst("Authorization");
-        updateMetrics();
+
         String[] values = retrieveParameters(authorization);
         String username = values[0];
         String password = values[1];
@@ -176,7 +181,7 @@ catch(Exception e){
                 n.setUsername(username);
                 n.setPassword(hashedPassword);
                 userDataRepository.save(n);
-
+                addCloudMetrics("User","/user/register","Count",post++,"csye6225");
 //                map.put("message", "User " + username + " created successfully");
 //                return new JSONObject(map).toString();
                 return ResponseEntity
@@ -233,6 +238,7 @@ catch(Exception e){
                     PublishRequest emailPublishRequest = new PublishRequest("arn:aws:sns:us-east-1:830173955131:password_reset", username);
                     PublishResult emailPublishResult = snsClient.publish(emailPublishRequest);
                     logger.info("topic published");
+                    addCloudMetrics("User","/user/reset","Count",reset++,"csye6225");
                     return ResponseEntity
                             .status(HttpStatus.OK)
                             .body("message published successfully");
@@ -277,24 +283,23 @@ catch(Exception e){
         return m.matches();
     }
 
-    public void updateMetrics(){
-       // ProfileCredentialsProvider credentialsProviders
-         //       = new ProfileCredentialsProvider(System.getenv("~/.aws/credentials"));
+    public void addCloudMetrics(String dimensionName, String dimensionValue, String metricName, int count, String nameSpace){
+
        // CloudWatchClient cw =  CloudWatchClient.builder().build() ;
         //CloudWatchClient cw = CloudWatchClient.create();
         final AmazonCloudWatch cw = AmazonCloudWatchClientBuilder.defaultClient();
         Dimension dimension = new Dimension()
-                .withName("/user/register")
-                .withValue("URLS");
+                .withName(dimensionName)
+                .withValue(dimensionValue);
 
         MetricDatum datum = new MetricDatum()
-                .withMetricName("Login")
+                .withMetricName(metricName)
                 .withUnit(StandardUnit.Count)
-                .withValue(12.0)
+                .withValue((double)count)
                 .withDimensions(dimension);
 
         PutMetricDataRequest request = new PutMetricDataRequest()
-                .withNamespace("csye6225")
+                .withNamespace(nameSpace)
                 .withMetricData(datum);
 
 //        Dimension dimension = Dimension
