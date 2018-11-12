@@ -296,7 +296,7 @@ catch(Exception e){
                 .withMetricName(metricName)
                 .withUnit(StandardUnit.Count)
                 .withValue((double)count)
-                .withDimensions(dimension);
+                .withDimensions(dimension).withStorageResolution(1);
 
         PutMetricDataRequest request = new PutMetricDataRequest()
                 .withNamespace(nameSpace)

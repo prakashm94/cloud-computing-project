@@ -101,7 +101,7 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="gradle" value="10" />
-          <entry key="java" value="1601" />
+          <entry key="java" value="1630" />
           <entry key="properties" value="163" />
           <entry key="xml" value="3" />
         </counts>
@@ -109,7 +109,7 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Groovy" value="10" />
-          <entry key="JAVA" value="1601" />
+          <entry key="JAVA" value="1630" />
           <entry key="Properties" value="163" />
           <entry key="XML" value="3" />
         </counts>
@@ -306,8 +306,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/neu/coe/project/cloudapp/Controllers/LoginController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-507">
-              <caret line="240" column="57" selection-start-line="240" selection-start-column="57" selection-end-line="240" selection-end-column="57" />
+            <state relative-caret-position="288">
+              <caret line="302" column="39" lean-forward="true" selection-start-line="302" selection-start-column="39" selection-end-line="302" selection-end-column="39" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -1181,7 +1181,7 @@
       <workItem from="1541736326088" duration="153000" />
       <workItem from="1541736538530" duration="489000" />
       <workItem from="1541826877433" duration="5091000" />
-      <workItem from="1541986459226" duration="10138000" />
+      <workItem from="1541986459226" duration="11271000" />
     </task>
     <servers />
   </component>
@@ -1218,7 +1218,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="244340000" />
+    <option name="totallyTimeSpent" value="245473000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1454,8 +1454,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/neu/coe/project/cloudapp/Controllers/LoginController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-507">
-          <caret line="240" column="57" selection-start-line="240" selection-start-column="57" selection-end-line="240" selection-end-column="57" />
+        <state relative-caret-position="288">
+          <caret line="302" column="39" lean-forward="true" selection-start-line="302" selection-start-column="39" selection-end-line="302" selection-end-column="39" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
