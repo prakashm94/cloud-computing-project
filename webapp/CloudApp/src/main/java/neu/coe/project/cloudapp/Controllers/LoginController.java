@@ -2,7 +2,6 @@ package neu.coe.project.cloudapp.Controllers;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.EnvironmentVariableCredentialsProvider;
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.sns.model.PublishResult;
 import neu.coe.project.cloudapp.Model.UserData;
 import neu.coe.project.cloudapp.Repository.UserDataRepository;
@@ -35,8 +34,11 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 import software.amazon.awssdk.auth.AwsCredentials;
+import software.amazon.awssdk.auth.InstanceProfileCredentialsProvider;
+import software.amazon.awssdk.auth.ProfileCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.cloudwatch.CloudWatchClient;
+import software.amazon.awssdk.services.cloudwatch.CloudWatchClientBuilder;
 import software.amazon.awssdk.services.cloudwatch.model.Dimension;
 import software.amazon.awssdk.services.cloudwatch.model.MetricDatum;
 import software.amazon.awssdk.services.cloudwatch.model.PutMetricDataRequest;
@@ -165,7 +167,7 @@ catch(Exception e){
     public @ResponseBody
     ResponseEntity<String> addNewUser(@RequestHeader HttpHeaders httpRequest) {
         final String authorization = httpRequest.getFirst("Authorization");
-
+        updateMetrics();
         String[] values = retrieveParameters(authorization);
         String username = values[0];
         String password = values[1];
@@ -181,7 +183,7 @@ catch(Exception e){
                 n.setUsername(username);
                 n.setPassword(hashedPassword);
                 userDataRepository.save(n);
-                updateMetrics();
+
 //                map.put("message", "User " + username + " created successfully");
 //                return new JSONObject(map).toString();
                 return ResponseEntity
@@ -283,9 +285,10 @@ catch(Exception e){
     }
 
     public void updateMetrics(){
-
-        //CloudWatchClient cw = CloudWatchClient.builder().region(Region.US_EAST_1).build();
-        CloudWatchClient cw = CloudWatchClient.create();
+       // ProfileCredentialsProvider credentialsProviders
+         //       = new ProfileCredentialsProvider(System.getenv("~/.aws/credentials"));
+        CloudWatchClient cw =  CloudWatchClient.builder().build() ;
+        //CloudWatchClient cw = CloudWatchClient.create();
         Dimension dimension = Dimension.builder()
                 .name("/user/register")
                 .value("URLS").build();
