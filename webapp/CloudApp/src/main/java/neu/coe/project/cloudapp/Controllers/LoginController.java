@@ -33,6 +33,9 @@ import java.util.Map;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
+
+import software.amazon.awssdk.auth.AwsCredentials;
+import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.cloudwatch.CloudWatchClient;
 import software.amazon.awssdk.services.cloudwatch.model.Dimension;
 import software.amazon.awssdk.services.cloudwatch.model.MetricDatum;
@@ -281,9 +284,8 @@ catch(Exception e){
 
     public void updateMetrics(){
 
-        CloudWatchClient cw =
-                CloudWatchClient.builder().build();
-
+        //CloudWatchClient cw = CloudWatchClient.builder().region(Region.US_EAST_1).build();
+        CloudWatchClient cw = CloudWatchClient.create();
         Dimension dimension = Dimension.builder()
                 .name("/user/register")
                 .value("URLS").build();
