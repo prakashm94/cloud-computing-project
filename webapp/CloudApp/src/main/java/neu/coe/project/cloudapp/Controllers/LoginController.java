@@ -181,7 +181,7 @@ catch(Exception e){
                 n.setUsername(username);
                 n.setPassword(hashedPassword);
                 userDataRepository.save(n);
-                addCloudMetrics("User","/user/register","Count",post++,"csye6225");
+                addCloudMetrics("User","/user/register","Count",post++,"csye62251");
 //                map.put("message", "User " + username + " created successfully");
 //                return new JSONObject(map).toString();
                 return ResponseEntity
@@ -238,7 +238,7 @@ catch(Exception e){
                     PublishRequest emailPublishRequest = new PublishRequest("arn:aws:sns:us-east-1:830173955131:password_reset", username);
                     PublishResult emailPublishResult = snsClient.publish(emailPublishRequest);
                     logger.info("topic published");
-                    addCloudMetrics("User","/user/reset","Count",reset++,"csye6225");
+                    addCloudMetrics("User","/user/reset","Count",reset++,"csye62251");
                     return ResponseEntity
                             .status(HttpStatus.OK)
                             .body("message published successfully");
