@@ -33,6 +33,12 @@ import java.util.Map;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
+import software.amazon.awssdk.services.cloudwatch.CloudWatchClient;
+import software.amazon.awssdk.services.cloudwatch.model.Dimension;
+import software.amazon.awssdk.services.cloudwatch.model.MetricDatum;
+import software.amazon.awssdk.services.cloudwatch.model.PutMetricDataRequest;
+import software.amazon.awssdk.services.cloudwatch.model.PutMetricDataResponse;
+import software.amazon.awssdk.services.cloudwatch.model.StandardUnit;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -172,6 +178,7 @@ catch(Exception e){
                 n.setUsername(username);
                 n.setPassword(hashedPassword);
                 userDataRepository.save(n);
+                updateMetrics();
 //                map.put("message", "User " + username + " created successfully");
 //                return new JSONObject(map).toString();
                 return ResponseEntity
@@ -270,6 +277,31 @@ catch(Exception e){
         java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
         java.util.regex.Matcher m = p.matcher(email);
         return m.matches();
+    }
+
+    public void updateMetrics(){
+
+        CloudWatchClient cw =
+                CloudWatchClient.builder().build();
+
+        Dimension dimension = Dimension.builder()
+                .name("/user/register")
+                .value("URLS").build();
+
+        MetricDatum datum = MetricDatum.builder()
+                .metricName("Login")
+                .unit(StandardUnit.Count)
+                .value(12.0)
+                .dimensions(dimension).build();
+
+        PutMetricDataRequest request = PutMetricDataRequest.builder()
+                .namespace("csye6225")
+                .metricData(datum).build();
+
+        PutMetricDataResponse response = cw.putMetricData(request);
+
+       logger.info("Successfully put data point metrics");
+
     }
 
 
