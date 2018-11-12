@@ -2,6 +2,9 @@ package neu.coe.project.cloudapp.Controllers;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.EnvironmentVariableCredentialsProvider;
+import com.amazonaws.services.cloudwatch.AmazonCloudWatch;
+import com.amazonaws.services.cloudwatch.AmazonCloudWatchClientBuilder;
+import com.amazonaws.services.cloudwatch.model.*;
 import com.amazonaws.services.sns.model.PublishResult;
 import neu.coe.project.cloudapp.Model.UserData;
 import neu.coe.project.cloudapp.Repository.UserDataRepository;
@@ -33,17 +36,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import software.amazon.awssdk.auth.AwsCredentials;
-import software.amazon.awssdk.auth.InstanceProfileCredentialsProvider;
-import software.amazon.awssdk.auth.ProfileCredentialsProvider;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.cloudwatch.CloudWatchClient;
-import software.amazon.awssdk.services.cloudwatch.CloudWatchClientBuilder;
-import software.amazon.awssdk.services.cloudwatch.model.Dimension;
-import software.amazon.awssdk.services.cloudwatch.model.MetricDatum;
-import software.amazon.awssdk.services.cloudwatch.model.PutMetricDataRequest;
-import software.amazon.awssdk.services.cloudwatch.model.PutMetricDataResponse;
-import software.amazon.awssdk.services.cloudwatch.model.StandardUnit;
+
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -287,23 +280,39 @@ catch(Exception e){
     public void updateMetrics(){
        // ProfileCredentialsProvider credentialsProviders
          //       = new ProfileCredentialsProvider(System.getenv("~/.aws/credentials"));
-        CloudWatchClient cw =  CloudWatchClient.builder().build() ;
+       // CloudWatchClient cw =  CloudWatchClient.builder().build() ;
         //CloudWatchClient cw = CloudWatchClient.create();
-        Dimension dimension = Dimension.builder()
-                .name("/user/register")
-                .value("URLS").build();
+        final AmazonCloudWatch cw = AmazonCloudWatchClientBuilder.defaultClient();
+        Dimension dimension = new Dimension()
+                .withName("/user/register")
+                .withValue("URLS");
 
-        MetricDatum datum = MetricDatum.builder()
-                .metricName("Login")
-                .unit(StandardUnit.Count)
-                .value(12.0)
-                .dimensions(dimension).build();
+        MetricDatum datum = new MetricDatum()
+                .withMetricName("Login")
+                .withUnit(StandardUnit.Count)
+                .withValue(12.0)
+                .withDimensions(dimension);
 
-        PutMetricDataRequest request = PutMetricDataRequest.builder()
-                .namespace("csye6225")
-                .metricData(datum).build();
+        PutMetricDataRequest request = new PutMetricDataRequest()
+                .withNamespace("csye6225")
+                .withMetricData(datum);
 
-        PutMetricDataResponse response = cw.putMetricData(request);
+//        Dimension dimension = Dimension
+//                .name("/user/register")
+//                .value("URLS").build();
+//
+//        MetricDatum datum = MetricDatum
+//                .metricName("Login")
+//                .unit(StandardUnit.Count)
+//                .value(12.0)
+//                .dimensions(dimension).build();
+//
+//        PutMetricDataRequest request = PutMetricDataRequest
+//                .namespace("csye6225")
+//                .metricData(datum).build();
+
+        //PutMetricDataResponse response = cw.putMetricData(request);
+        PutMetricDataResult response = cw.putMetricData(request);
 
        logger.info("Successfully put data point metrics");
 
