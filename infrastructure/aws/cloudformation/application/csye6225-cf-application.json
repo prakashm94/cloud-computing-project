@@ -25,7 +25,7 @@
     },
   "topicName": {
       "Type": "String"
-     }
+     },
   "accountId": {
       "Type": "String"
      }
