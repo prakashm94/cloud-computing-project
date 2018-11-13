@@ -17,6 +17,10 @@
 	      "S3Bucket": {"Fn::ImportValue" : "csye6225-fall2018-s3lambda"},
 	      "S3Key": "lambdaapp.zip"
     	      },
+        "Environment": { 
+      "Variables": { 
+         "domainName" : "csye6225-fall2018-shettypoo.me" 
+      },
        "Handler" : "index.LogEvent",
        "Role": {"Ref": "resource1"},
        "Runtime": "java8",
