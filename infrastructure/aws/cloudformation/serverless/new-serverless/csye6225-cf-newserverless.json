@@ -7,6 +7,9 @@
   },
   "topicName": {
       "Type": "String"
+     },
+ "domain": {
+      "Type": "String"
      }
  },
  "Resources" : {
@@ -19,7 +22,7 @@
     	      },
         "Environment": { 
       "Variables": { 
-         "domainName" : "csye6225-fall2018-shettypoo.me" 
+         "domainName" : {"Ref": "domain"}
       },
        "Handler" : "index.LogEvent",
        "Role": {"Ref": "resource1"},
