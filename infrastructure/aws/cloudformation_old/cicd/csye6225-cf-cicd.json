@@ -31,9 +31,7 @@
 	  "ManagedPolicyArns": [
           {"Ref": "CloudWatchLogPolicy"},
 	  "arn:aws:iam::aws:policy/AmazonS3FullAccess",
-	  "arn:aws:iam::aws:policy/AmazonSNSFullAccess",
-	  "arn:aws:iam::aws:policy/CloudWatchAgentAdminPolicy",
-	  "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+	  "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
           ],
           "AssumeRolePolicyDocument": {
             "Version": "2012-10-17",
@@ -82,7 +80,7 @@
           ]
         }
       },
-   "CodeDeployServiceRole": {
+	   "CodeDeployServiceRole": {
         "Type": "AWS::IAM::Role",
         "Properties": {
           "ManagedPolicyArns": [
@@ -181,7 +179,7 @@
           "ApplicationName": {"Ref" : "applicationName"}
         }
       },
-	   "DeploymentGroupEC2": {
+	   "DeploymentGroup": {
         "Type": "AWS::CodeDeploy::DeploymentGroup",
         "Properties": {
           "ApplicationName": {
@@ -208,7 +206,6 @@
           }
         }
       },
-	  
 	  "s3Bucket": {
          "Type": "AWS::S3::Bucket",
          "Properties": {
@@ -237,28 +234,27 @@
 				  }
 			}
 		},
-
-     "LambdaExecutionRole": {
-	"Type": "AWS::IAM::Role",
-	"Properties": {
-		"AssumeRolePolicyDocument": {
-			"Version": "2012-10-17",
-			"Statement": [{
-				"Effect": "Allow",
-				"Principal": {"Service": ["lambda.amazonaws.com"]},
-				"Action": ["sts:AssumeRole"]
-				    }]
-			},
-		"Path": "/",
-		"ManagedPolicyArns": [
-			"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-			"arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess",
-			"arn:aws:iam::aws:policy/AmazonSESFullAccess",
-			"arn:aws:iam::aws:policy/service-role/AWSLambdaDynamoDBExecutionRole"
+	"LambdaExecutionRole": {
+		"Type": "AWS::IAM::Role",
+		"Properties": {
+			"AssumeRolePolicyDocument": {
+				"Version": "2012-10-17",
+				"Statement": [{
+					"Effect": "Allow",
+					"Principal": {"Service": ["lambda.amazonaws.com"]},
+					"Action": ["sts:AssumeRole"]
+					    }]
+				},
+			"Path": "/",
+			"ManagedPolicyArns": [
+				"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+				"arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess",
+				"arn:aws:iam::aws:policy/AmazonSESFullAccess",
+				"arn:aws:iam::aws:policy/service-role/AWSLambdaDynamoDBExecutionRole"
 				],
-		"RoleName": "LambdaExecutionRole"
-		}
-        }
+			"RoleName": "LambdaExecutionRole"
+			}
+        	}
 },
 	"Outputs" : {
 	    "servicerole" : {
@@ -266,13 +262,10 @@
 		      "Value" : {"Ref" : "CodeDeployEC2ServiceRole"},
 		      "Export" : {"Name" : "csye6225-cicd-CodeDeployEC2ServiceRole"}
     			},
-
 	    "lambdaexecutionrole" : {
-		      "Description" : "The Lambda Execution Role",
+		      "Description" : "The Lambda Execution Service",
 		      "Value" : {"Ref" : "LambdaExecutionRole"},
 		      "Export" : {"Name" : "csye6225-cicd-LambdaExecutionRole"}
     			}
 	   }
-
-
 }

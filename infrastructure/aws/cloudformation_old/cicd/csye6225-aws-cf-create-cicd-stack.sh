@@ -1,4 +1,3 @@
-#!/bin/bash
 echo "Creating CICD Stack"
 
 stack_name=$1
