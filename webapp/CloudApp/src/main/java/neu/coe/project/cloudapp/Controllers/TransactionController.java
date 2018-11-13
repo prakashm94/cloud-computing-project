@@ -2,6 +2,7 @@ package neu.coe.project.cloudapp.Controllers;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import neu.coe.project.cloudapp.Model.MetricUtility;
 import neu.coe.project.cloudapp.Model.TransactionData;
 import neu.coe.project.cloudapp.Model.UserData;
 import neu.coe.project.cloudapp.Repository.AttachmentRepository;
@@ -52,6 +53,7 @@ public class TransactionController {
 
                         ObjectMapper mapper = new ObjectMapper();
                         String jsonInString = mapper.writeValueAsString(t);
+                        MetricUtility.addCloudMetrics("WebAppMetrics","GET","Count", ++MetricUtility.get,"csye6225-WebApp");
 
                         return ResponseEntity
                                 .status(HttpStatus.OK)
@@ -98,7 +100,9 @@ public class TransactionController {
 
             transactionData.setUserData(user);
             transactionRepository.save(transactionData);
-            ObjectMapper mapper = new ObjectMapper();
+                MetricUtility.addCloudMetrics("WebAppMetrics","POST","Count", ++MetricUtility.post,"csye6225-WebApp");
+
+                ObjectMapper mapper = new ObjectMapper();
 
             String jsonInString = mapper.writeValueAsString(transactionData);
 
@@ -137,6 +141,7 @@ public class TransactionController {
                     if (t.getUserData().getUsername().equals(username)) {
 
                         transactionRepository.delete(t);
+                        MetricUtility.addCloudMetrics("WebAppMetrics","DELETE","Count", ++MetricUtility.delete,"csye6225-WebApp");
 
                         return ResponseEntity
                                 .status(HttpStatus.OK)
@@ -196,6 +201,8 @@ public class TransactionController {
                     if (transactionData.getUserData().getUsername().equals(username)) {
                         transactionRepository.findAll();
                         transactionRepository.save(transactionData);
+                        MetricUtility.addCloudMetrics("WebAppMetrics","PUT","Count", ++MetricUtility.put,"csye6225-WebApp");
+
                         ObjectMapper mapper = new ObjectMapper();
 
                         String jsonInString = mapper.writeValueAsString(transactionData);

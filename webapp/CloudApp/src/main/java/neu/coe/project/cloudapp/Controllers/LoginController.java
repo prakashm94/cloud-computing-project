@@ -6,6 +6,7 @@ import com.amazonaws.services.cloudwatch.AmazonCloudWatch;
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchClientBuilder;
 import com.amazonaws.services.cloudwatch.model.*;
 import com.amazonaws.services.sns.model.PublishResult;
+import neu.coe.project.cloudapp.Model.MetricUtility;
 import neu.coe.project.cloudapp.Model.UserData;
 import neu.coe.project.cloudapp.Repository.UserDataRepository;
 import org.json.JSONObject;
@@ -44,13 +45,16 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping
 public class LoginController {
     private static int workload = 17;
-    private static int post=0;
-    private static int put=0;
-    private static int delete=0;
-    private static int get=0;
-    private static int reset=0;
+
     //@Value("${aws.acccoutnId}") String accountId;
 //    @Value("${aws.topicName}") String password_reset;
+
+    @Value("${aws.topic.name}")
+    private String topicName;
+
+    @Value("${aws.account.id}")
+    private String accId;
+
     @Value("${cloud.aws.path}")
     private String awsCredentialsPath;
     Logger logger = Logger.getLogger("MyLog");
@@ -107,6 +111,8 @@ catch(Exception e){
             map.put("time", ft.format(new Date()));
             map.put("message", "Login Successful");
             System.out.println(new JSONObject(map));
+            MetricUtility.addCloudMetrics("WebAppMetrics","GET","Count", ++MetricUtility.get,"csye6225-WebApp");
+
             return new JSONObject(map).toString();
 
         } else {
@@ -130,7 +136,9 @@ catch(Exception e){
             map.put("time", ft.format(new Date()));
             map.put("message", "Login Successful");
             System.out.println(new JSONObject(map));
-            return new JSONObject(map).toString();
+        MetricUtility.addCloudMetrics("WebAppMetrics","GET","Count", ++MetricUtility.get,"csye6225-WebApp");
+
+        return new JSONObject(map).toString();
 
 
     }
@@ -181,7 +189,7 @@ catch(Exception e){
                 n.setUsername(username);
                 n.setPassword(hashedPassword);
                 userDataRepository.save(n);
-                addCloudMetrics("User","/user/register","Count",post++,"csye62251");
+                MetricUtility.addCloudMetrics("WebAppMetrics","POST","Count", ++MetricUtility.post,"csye6225-WebApp");
 //                map.put("message", "User " + username + " created successfully");
 //                return new JSONObject(map).toString();
                 return ResponseEntity
@@ -207,6 +215,8 @@ catch(Exception e){
     public @ResponseBody
     Iterable<UserData> getAllUsers() {
         // This returns a JSON or XML with the users
+        MetricUtility.addCloudMetrics("WebAppMetrics","GET","Count", ++MetricUtility.get,"csye6225-WebApp");
+
         return userDataRepository.findAll();
     }
 
@@ -235,10 +245,10 @@ catch(Exception e){
                     //jsonObject.addProperty("username", username);
 
                     //jsonObject.put("username", username);
-                    PublishRequest emailPublishRequest = new PublishRequest("arn:aws:sns:us-east-1:830173955131:password_reset", username);
+                    PublishRequest emailPublishRequest = new PublishRequest("arn:aws:sns:us-east-1:"+accId+":"+topicName, username);
                     PublishResult emailPublishResult = snsClient.publish(emailPublishRequest);
                     logger.info("topic published");
-                    addCloudMetrics("User","/user/reset","Count",reset++,"csye62251");
+                    MetricUtility.addCloudMetrics("WebAppMetrics","POST","Count", ++MetricUtility.post,"csye6225-WebApp");
                     return ResponseEntity
                             .status(HttpStatus.OK)
                             .body("message published successfully");
@@ -283,45 +293,7 @@ catch(Exception e){
         return m.matches();
     }
 
-    public void addCloudMetrics(String dimensionName, String dimensionValue, String metricName, int count, String nameSpace){
 
-       // CloudWatchClient cw =  CloudWatchClient.builder().build() ;
-        //CloudWatchClient cw = CloudWatchClient.create();
-        final AmazonCloudWatch cw = AmazonCloudWatchClientBuilder.defaultClient();
-        Dimension dimension = new Dimension()
-                .withName(dimensionName)
-                .withValue(dimensionValue);
-
-        MetricDatum datum = new MetricDatum()
-                .withMetricName(metricName)
-                .withUnit(StandardUnit.Count)
-                .withValue((double)count)
-                .withDimensions(dimension).withStorageResolution(1);
-
-        PutMetricDataRequest request = new PutMetricDataRequest()
-                .withNamespace(nameSpace)
-                .withMetricData(datum);
-
-//        Dimension dimension = Dimension
-//                .name("/user/register")
-//                .value("URLS").build();
-//
-//        MetricDatum datum = MetricDatum
-//                .metricName("Login")
-//                .unit(StandardUnit.Count)
-//                .value(12.0)
-//                .dimensions(dimension).build();
-//
-//        PutMetricDataRequest request = PutMetricDataRequest
-//                .namespace("csye6225")
-//                .metricData(datum).build();
-
-        //PutMetricDataResponse response = cw.putMetricData(request);
-        PutMetricDataResult response = cw.putMetricData(request);
-
-       logger.info("Successfully put data point metrics");
-
-    }
 
 
 }
