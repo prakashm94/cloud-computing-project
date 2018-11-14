@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7fd6b6a1-e172-49e9-8dfe-f6eb22ca87e2" name="Default Changelist" comment="" />
+    <list default="true" id="7fd6b6a1-e172-49e9-8dfe-f6eb22ca87e2" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/neu/coe/project/cloudapp/Controllers/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/neu/coe/project/cloudapp/Controllers/LoginController.java" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -99,7 +101,7 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="gradle" value="10" />
-          <entry key="java" value="1915" />
+          <entry key="java" value="1949" />
           <entry key="properties" value="222" />
           <entry key="xml" value="3" />
         </counts>
@@ -107,7 +109,7 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Groovy" value="10" />
-          <entry key="JAVA" value="1915" />
+          <entry key="JAVA" value="1949" />
           <entry key="Properties" value="222" />
           <entry key="XML" value="3" />
         </counts>
@@ -304,8 +306,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/neu/coe/project/cloudapp/Controllers/LoginController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="363">
-              <caret line="75" column="5" lean-forward="true" selection-start-line="75" selection-start-column="5" selection-end-line="75" selection-end-column="5" />
+            <state relative-caret-position="423">
+              <caret line="247" column="49" selection-start-line="247" selection-start-column="49" selection-end-line="247" selection-end-column="49" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#2105#2124#1" expanded="true" />
@@ -850,9 +852,9 @@
         <option value="$PROJECT_DIR$/src/main/resources/application-dev.properties" />
         <option value="$PROJECT_DIR$/src/main/resources/application.properties" />
         <option value="$PROJECT_DIR$/src/main/java/neu/coe/project/cloudapp/Model/MetricUtility.java" />
-        <option value="$PROJECT_DIR$/src/main/java/neu/coe/project/cloudapp/Controllers/LoginController.java" />
         <option value="$PROJECT_DIR$/src/main/java/neu/coe/project/cloudapp/Controllers/TransactionController.java" />
         <option value="$PROJECT_DIR$/src/main/java/neu/coe/project/cloudapp/Controllers/AwsClientController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/neu/coe/project/cloudapp/Controllers/LoginController.java" />
       </list>
     </option>
   </component>
@@ -869,7 +871,7 @@
       </MavenImportingSettings>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="width" value="1440" />
     <option name="height" value="753" />
   </component>
@@ -995,7 +997,7 @@
     <property name="RequestMappingsPanelWidth2" value="75" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542083326859" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542152783035" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -1181,7 +1183,7 @@
       <workItem from="1541736326088" duration="153000" />
       <workItem from="1541736538530" duration="489000" />
       <workItem from="1541826877433" duration="5091000" />
-      <workItem from="1541986459226" duration="21565000" />
+      <workItem from="1541986459226" duration="21624000" />
     </task>
     <servers />
   </component>
@@ -1218,7 +1220,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="255767000" />
+    <option name="totallyTimeSpent" value="255826000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1464,8 +1466,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/neu/coe/project/cloudapp/Controllers/LoginController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="363">
-          <caret line="75" column="5" lean-forward="true" selection-start-line="75" selection-start-column="5" selection-end-line="75" selection-end-column="5" />
+        <state relative-caret-position="423">
+          <caret line="247" column="49" selection-start-line="247" selection-start-column="49" selection-end-line="247" selection-end-column="49" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#2105#2124#1" expanded="true" />

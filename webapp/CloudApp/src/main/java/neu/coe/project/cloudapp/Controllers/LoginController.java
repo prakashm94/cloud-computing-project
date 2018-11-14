@@ -245,6 +245,7 @@ catch(Exception e){
                     //jsonObject.addProperty("username", username);
 
                     //jsonObject.put("username", username);
+                    System.out.println("topic ARN:  arn:aws:sns:us-east-1:"+accId+":"+topicName);
                     PublishRequest emailPublishRequest = new PublishRequest("arn:aws:sns:us-east-1:"+accId+":"+topicName, username);
                     PublishResult emailPublishResult = snsClient.publish(emailPublishRequest);
                     logger.info("topic published");

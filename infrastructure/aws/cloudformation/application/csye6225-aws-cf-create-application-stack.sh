@@ -7,7 +7,7 @@ DBUSER=$4
 DBPWD=$5
 s3BucketLambda=$6
 topicName=$7
-accId = $(aws sts get-caller-identity --query "Account" --output text)
+export accId=$(aws sts get-caller-identity --query "Account" --output text)
 echo $stack_name
 
 webSecurityGroupTagValue=csye6225-webapp
