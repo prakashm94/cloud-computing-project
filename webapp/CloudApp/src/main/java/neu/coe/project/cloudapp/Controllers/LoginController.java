@@ -117,7 +117,7 @@ catch(Exception e){
             map.put("message", "Login Successful");
             System.out.println(new JSONObject(map));
             MetricUtility.addCloudMetrics("WebAppMetrics","GET","Count", ++MetricUtility.get,"csye6225-WebApp");
-
+            statsDClient.incrementCounter("user.time.get");
             return new JSONObject(map).toString();
 
         } else {
@@ -142,7 +142,7 @@ catch(Exception e){
             map.put("message", "Login Successful");
             System.out.println(new JSONObject(map));
         MetricUtility.addCloudMetrics("WebAppMetrics","GET","Count", ++MetricUtility.get,"csye6225-WebApp");
-
+        statsDClient.incrementCounter("user.times.get");
         return new JSONObject(map).toString();
 
 
@@ -255,7 +255,7 @@ catch(Exception e){
                     MetricUtility.addCloudMetrics("WebAppMetrics","POST","Count", ++MetricUtility.post,"csye6225-WebApp");
                     return ResponseEntity
                             .status(HttpStatus.OK)
-                            .body("message published successfully");
+                            .body("SNS triggered successfully");
                 }
             }
         }

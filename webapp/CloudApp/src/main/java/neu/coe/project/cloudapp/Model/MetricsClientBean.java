@@ -23,7 +23,7 @@ public class MetricsClientBean {
     public StatsDClient metricsClient() {
 
         if (publishMetrics) {
-            return new NonBlockingStatsDClient("csye6225Stats", metricsServerHost, metricsServerPort);
+            return new NonBlockingStatsDClient("url-", metricsServerHost, metricsServerPort);
         }
 
         return new NoOpStatsDClient();

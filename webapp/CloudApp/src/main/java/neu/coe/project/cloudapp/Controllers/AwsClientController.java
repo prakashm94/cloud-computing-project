@@ -12,6 +12,7 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.timgroup.statsd.StatsDClient;
 import neu.coe.project.cloudapp.Model.Attachment;
 import neu.coe.project.cloudapp.Model.MetricUtility;
 import neu.coe.project.cloudapp.Model.TransactionData;
@@ -76,7 +77,8 @@ public class AwsClientController {
     @Autowired
     private  TransactionController transactionController;
 
-
+    @Autowired
+    private StatsDClient statsDClient;
     @RequestMapping(method = POST, path = "/transactions/{transactionId}/attachments")
     public @ResponseBody ResponseEntity<String> createAttachment(@RequestHeader HttpHeaders httpRequest, @PathVariable(value = "transactionId") String transactionId, @RequestParam("url") MultipartFile file) throws Exception {
         final String authorization = httpRequest.getFirst("Authorization");
@@ -124,7 +126,7 @@ public class AwsClientController {
                     t.setAttachments(as);
                     transactionDataRepository.save(t);
                         MetricUtility.addCloudMetrics("WebAppMetrics","POST","Count", ++MetricUtility.post,"csye6225-WebApp");
-
+                        statsDClient.incrementCounter("attachment.post");
                         ObjectMapper mapper = new ObjectMapper();
 
                         String jsonInString = mapper.writeValueAsString(t);
@@ -174,7 +176,7 @@ public class AwsClientController {
 
                             List<Attachment> at = transactionController.getTransaction(tid).getAttachments();
                             MetricUtility.addCloudMetrics("WebAppMetrics","GET","Count", ++MetricUtility.get,"csye6225-WebApp");
-
+                            statsDClient.incrementCounter("attachment.get");
                             ObjectMapper mapper = new ObjectMapper();
 
                             String jsonInString = mapper.writeValueAsString(at);
@@ -259,7 +261,7 @@ public class AwsClientController {
                             System.out.println("Amazon url" + s3client.getUrl(bucketName, a.getId()));
                             a.setUrl(s3client.getUrl(bucketName, a.getId()).toString());
                             MetricUtility.addCloudMetrics("WebAppMetrics","PUT","Count", ++MetricUtility.put,"csye6225-WebApp");
-
+                            statsDClient.incrementCounter("attachment.put");
 
                         }
 
@@ -337,7 +339,7 @@ public class AwsClientController {
                     t.getAttachments().remove(a);
                     attachmentRepository.delete(a);
                         MetricUtility.addCloudMetrics("WebAppMetrics","DELETE","Count", ++MetricUtility.delete,"csye6225-WebApp");
-
+                        statsDClient.incrementCounter("attachment.delete");
                         return ResponseEntity
                             .status(HttpStatus.OK)
                             .body("Deleted Successfully");
