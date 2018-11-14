@@ -90,7 +90,9 @@ email: shah.vru@husky.neu.edu
 # Run the Travis build then code will be deployed in ec2
   1. hit the public dns of ec2 follwed by application name
   2. Perform CRUD operations on user, Transactions and Attachments on Postman and check whether Applications is working.
+  3. check images in S3
 
 # Instructions to run unit, integration and/or load tests.
 
   1. Run the LoginControllerTest Junit file which is present in Test folder.
+
