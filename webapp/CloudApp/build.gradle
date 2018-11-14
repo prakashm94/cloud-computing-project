@@ -66,6 +66,6 @@ compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa',
 	compile "org.springframework.security:spring-security-core:5.0.8.RELEASE"
 	// https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-cloudwatch
 	compile group: 'com.amazonaws', name: 'aws-java-sdk-cloudwatch', version: '1.11.447'
-
+	compile('com.timgroup:java-statsd-client:3.0.1')
 
 }

@@ -6,6 +6,7 @@ import com.amazonaws.services.cloudwatch.AmazonCloudWatch;
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchClientBuilder;
 import com.amazonaws.services.cloudwatch.model.*;
 import com.amazonaws.services.sns.model.PublishResult;
+import com.timgroup.statsd.StatsDClient;
 import neu.coe.project.cloudapp.Model.MetricUtility;
 import neu.coe.project.cloudapp.Model.UserData;
 import neu.coe.project.cloudapp.Repository.UserDataRepository;
@@ -59,6 +60,10 @@ public class LoginController {
     private String awsCredentialsPath;
     Logger logger = Logger.getLogger("MyLog");
     FileHandler fh;
+
+    @Autowired
+    private StatsDClient statsDClient;
+
 
     public LoginController() {
         try {
@@ -192,6 +197,7 @@ catch(Exception e){
                 MetricUtility.addCloudMetrics("WebAppMetrics","POST","Count", ++MetricUtility.post,"csye6225-WebApp");
 //                map.put("message", "User " + username + " created successfully");
 //                return new JSONObject(map).toString();
+                statsDClient.incrementCounter("user.register.post");
                 return ResponseEntity
                         .status(HttpStatus.OK)
                         .body("User "+username+" created successfully");
@@ -241,14 +247,11 @@ catch(Exception e){
                     AmazonSNSClient snsClient = new AmazonSNSClient();
 
 
-                    //JSONObject jsonObject = new JSONObject();
-                    //jsonObject.addProperty("username", username);
-
-                    //jsonObject.put("username", username);
                     System.out.println("topic ARN:  arn:aws:sns:us-east-1:"+accId+":"+topicName);
                     PublishRequest emailPublishRequest = new PublishRequest("arn:aws:sns:us-east-1:"+accId+":"+topicName, username);
                     PublishResult emailPublishResult = snsClient.publish(emailPublishRequest);
                     logger.info("topic published");
+                    statsDClient.incrementCounter("user.reset.post");
                     MetricUtility.addCloudMetrics("WebAppMetrics","POST","Count", ++MetricUtility.post,"csye6225-WebApp");
                     return ResponseEntity
                             .status(HttpStatus.OK)
@@ -258,8 +261,7 @@ catch(Exception e){
         }
 
         else{
-//                map.put("message", "Username already exists");
-//                return new JSONObject(map).toString();
+
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body("not a valid user");
