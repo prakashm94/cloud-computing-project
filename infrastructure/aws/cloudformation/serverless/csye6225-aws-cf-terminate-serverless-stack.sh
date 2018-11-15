@@ -1,6 +1,7 @@
 #!/bin/bash
-echo "Updating Stack To Delete"
+echo "Stack Deleting in progress"
 stack_name=$1
+
 
 
 echo $stack_name

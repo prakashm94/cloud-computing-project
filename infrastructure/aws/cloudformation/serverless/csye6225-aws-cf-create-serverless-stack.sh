@@ -4,7 +4,6 @@ stack_name=$1
 topicName=$2
 domain=$3
 
-
 echo $stack_name
 
 export account_id=$(aws sts get-caller-identity --query "Account" --output text)
@@ -13,7 +12,6 @@ export resource1="arn:aws:iam::"$account_id":role/LambdaExecutionRole"
 
 
 stackId=$(aws cloudformation create-stack --stack-name $stack_name --template-body file://csye6225-cf-serverless.json --parameters ParameterKey=topicName,ParameterValue=$topicName ParameterKey=domain,ParameterValue=$domain ParameterKey=resource1,ParameterValue=$resource1 --query [StackId] --capabilities CAPABILITY_NAMED_IAM --output text)
-
 
 echo $stackId
 

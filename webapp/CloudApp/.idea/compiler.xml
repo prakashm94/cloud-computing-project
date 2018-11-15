@@ -9,5 +9,12 @@
         <module name="CloudApp" />
       </profile>
     </annotationProcessing>
+<<<<<<< HEAD
+    <bytecodeTargetLevel>
+      <module name="CloudApp_main" target="1.8" />
+      <module name="CloudApp_test" target="1.8" />
+    </bytecodeTargetLevel>
+=======
+>>>>>>> 6989023930816f73e760feeec87735884c41cf24
   </component>
 </project>
