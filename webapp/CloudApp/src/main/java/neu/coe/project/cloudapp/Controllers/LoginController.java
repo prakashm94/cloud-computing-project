@@ -1,9 +1,18 @@
 package neu.coe.project.cloudapp.Controllers;
 
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.EnvironmentVariableCredentialsProvider;
+import com.amazonaws.services.cloudwatch.AmazonCloudWatch;
+import com.amazonaws.services.cloudwatch.AmazonCloudWatchClientBuilder;
+import com.amazonaws.services.cloudwatch.model.*;
+import com.amazonaws.services.sns.model.PublishResult;
+import com.timgroup.statsd.StatsDClient;
+import neu.coe.project.cloudapp.Model.MetricUtility;
 import neu.coe.project.cloudapp.Model.UserData;
 import neu.coe.project.cloudapp.Repository.UserDataRepository;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,13 +22,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+//import com.google.gson.JsonObject;
+//import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+//import com.amazonaws.services.dynamodbv2.datamodeling.*;
+//import com.amazonaws.services.sns.AmazonSNSClient;
+import com.amazonaws.services.sns.AmazonSNSClient;
+import com.amazonaws.services.sns.model.PublishRequest;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+
+
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -28,6 +47,38 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class LoginController {
     private static int workload = 17;
 
+    //@Value("${aws.acccoutnId}") String accountId;
+//    @Value("${aws.topicName}") String password_reset;
+
+    @Value("${aws.topic.name}")
+    private String topicName;
+
+    @Value("${aws.account.id}")
+    private String accId;
+
+    @Value("${cloud.aws.path}")
+    private String awsCredentialsPath;
+    Logger logger = Logger.getLogger("MyLog");
+    FileHandler fh;
+
+    @Autowired
+    private StatsDClient statsDClient;
+
+
+    public LoginController() {
+        try {
+            fh = new FileHandler("/opt/tomcat/logs/csye6225.log");
+            logger.addHandler(fh);
+            SimpleFormatter formatter = new SimpleFormatter();
+            fh.setFormatter(formatter);
+
+            // the following statement is used to log any messages
+            logger.info("My first log");
+        }
+catch(Exception e){
+    logger.info("Exception");
+}
+    }
 
     public String[] retrieveParameters(String authorization) {
         String[] values = {};
@@ -65,6 +116,8 @@ public class LoginController {
             map.put("time", ft.format(new Date()));
             map.put("message", "Login Successful");
             System.out.println(new JSONObject(map));
+            MetricUtility.addCloudMetrics("WebAppMetrics","GET","Count", ++MetricUtility.get,"csye6225-WebApp");
+            statsDClient.incrementCounter("user.time.get");
             return new JSONObject(map).toString();
 
         } else {
@@ -88,7 +141,9 @@ public class LoginController {
             map.put("time", ft.format(new Date()));
             map.put("message", "Login Successful");
             System.out.println(new JSONObject(map));
-            return new JSONObject(map).toString();
+        MetricUtility.addCloudMetrics("WebAppMetrics","GET","Count", ++MetricUtility.get,"csye6225-WebApp");
+        statsDClient.incrementCounter("user.times.get");
+        return new JSONObject(map).toString();
 
 
     }
@@ -139,8 +194,10 @@ public class LoginController {
                 n.setUsername(username);
                 n.setPassword(hashedPassword);
                 userDataRepository.save(n);
+                MetricUtility.addCloudMetrics("WebAppMetrics","POST","Count", ++MetricUtility.post,"csye6225-WebApp");
 //                map.put("message", "User " + username + " created successfully");
 //                return new JSONObject(map).toString();
+                statsDClient.incrementCounter("user.register.post");
                 return ResponseEntity
                         .status(HttpStatus.OK)
                         .body("User "+username+" created successfully");
@@ -164,7 +221,55 @@ public class LoginController {
     public @ResponseBody
     Iterable<UserData> getAllUsers() {
         // This returns a JSON or XML with the users
+        MetricUtility.addCloudMetrics("WebAppMetrics","GET","Count", ++MetricUtility.get,"csye6225-WebApp");
+
         return userDataRepository.findAll();
+    }
+
+    @RequestMapping(path="user/reset",method=POST)
+    public @ResponseBody
+    ResponseEntity<String> resetPassword (@RequestHeader HttpHeaders httpRequest) {
+        logger.info("Reset password called:");
+        final String authorization = httpRequest.getFirst("Authorization");
+
+        String[] values = retrieveParameters(authorization);
+        String username = values[0];
+        Map<String, String> map = new HashMap<String, String>();
+
+        if (isValidEmailAddress(username)) {
+
+            Iterable<UserData> allusers = userDataRepository.findAll();
+            for (UserData user : allusers) {
+
+                if (user.getUsername().equalsIgnoreCase(username)) {
+                    //AWSCredentials credentialsProvider
+                      //      = new  EnvironmentVariableCredentialsProvider().getCredentials();
+                    AmazonSNSClient snsClient = new AmazonSNSClient();
+
+
+                    System.out.println("topic ARN:  arn:aws:sns:us-east-1:"+accId+":"+topicName);
+                    PublishRequest emailPublishRequest = new PublishRequest("arn:aws:sns:us-east-1:"+accId+":"+topicName, username);
+                    PublishResult emailPublishResult = snsClient.publish(emailPublishRequest);
+                    logger.info("topic published");
+                    statsDClient.incrementCounter("user.reset.post");
+                    MetricUtility.addCloudMetrics("WebAppMetrics","POST","Count", ++MetricUtility.post,"csye6225-WebApp");
+                    return ResponseEntity
+                            .status(HttpStatus.OK)
+                            .body("SNS triggered successfully");
+                }
+            }
+        }
+
+        else{
+
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("not a valid user");
+        }
+
+          return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body("Please check your request");
     }
 
     public String hashPassword(String password_plaintext) {
@@ -190,6 +295,8 @@ public class LoginController {
         java.util.regex.Matcher m = p.matcher(email);
         return m.matches();
     }
+
+
 
 
 }
