@@ -3,7 +3,7 @@ echo "Creating Stack"
 stack_name=$1
 topicName=$2
 domain=$3
-#applicationNameLambda=$3
+
 
 echo $stack_name
 
@@ -14,9 +14,6 @@ export resource1="arn:aws:iam::"$account_id":role/LambdaExecutionRole"
 
 stackId=$(aws cloudformation create-stack --stack-name $stack_name --template-body file://csye6225-cf-serverless.json --parameters ParameterKey=topicName,ParameterValue=$topicName ParameterKey=domain,ParameterValue=$domain ParameterKey=resource1,ParameterValue=$resource1 --query [StackId] --capabilities CAPABILITY_NAMED_IAM --output text)
 
-#stackId=$(aws cloudformation create-stack --stack-name $stack_name --template-body file://csye6225-cf-newserverless.json --parameters ParameterKey=resource1,ParameterValue=$resource1 --query [StackId] --capabilities CAPABILITY_NAMED_IAM --output text)
-
-#stackId=$(aws cloudformation create-stack --stack-name $stack_name --template-body file://csye6225-cf-serverless.json --parameters --query [StackId] --capabilities CAPABILITY_NAMED_IAM --output text)
 
 echo $stackId
 
