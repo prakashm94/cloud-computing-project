@@ -566,6 +566,14 @@
             "ComparisonOperator":"LessThanThreshold"
          }
       },
+      "s3Bucket":{
+         "Type":"AWS::S3::Bucket",
+         "Properties":{
+            "BucketName":{
+               "Ref":"s3BucketCloud"
+            }
+         }
+      },
       "CodeDeployApplication": {
         "Type": "AWS::CodeDeploy::Application",
         "Properties": {
@@ -601,14 +609,7 @@
 
         }
       },
-      "s3Bucket":{
-         "Type":"AWS::S3::Bucket",
-         "Properties":{
-            "BucketName":{
-               "Ref":"s3BucketCloud"
-            }
-         }
-      },
+     
       "s3BucketLambdaExport":{
          "Type":"AWS::S3::Bucket",
          "Properties":{
