@@ -31,9 +31,9 @@ after_success:
   - cd webapp/CloudApp/build/libs
   - ls -al
   - cd ../../../..
-  - zip -r csye6225-cloudapp.zip webapp/CloudApp/build/libs/CloudApp.war *.sh *.yml
+  - zip -r csye6225-cloudapp-$TRAVIS_JOB_NUMBER.zip webapp/CloudApp/build/libs/CloudApp.war *.sh *.yml
   - ls -al
-  - mv csye6225-cloudapp.zip codedeploy_artifact/
+  - mv csye6225-cloudapp-$TRAVIS_JOB_NUMBER.zip codedeploy_artifact/
   - cd codedeploy_artifact
   - ls -al
   - pwd
@@ -57,7 +57,7 @@ deploy:
     access_key_id: $access_key_id
     secret_access_key: $sak
     bucket: $s3_bucket
-    key: csye6225-cloudapp.zip
+    key: csye6225-cloudapp-$TRAVIS_JOB_NUMBER.zip
     bundle_type: zip
     application: $application
     deployment_group: $deployment_group

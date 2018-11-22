@@ -175,7 +175,39 @@
           }
         }
       },
-
+	   "CodeDeployApplication": {
+        "Type": "AWS::CodeDeploy::Application",
+        "Properties": {
+          "ApplicationName": {"Ref" : "applicationName"}
+        }
+      },
+	   "DeploymentGroupEC2": {
+        "Type": "AWS::CodeDeploy::DeploymentGroup",
+        "Properties": {
+          "ApplicationName": {
+            "Ref": "CodeDeployApplication"
+          },
+          "DeploymentConfigName": "CodeDeployDefault.OneAtATime",
+          "DeploymentGroupName": "csye6225CloudappCodeDeploy",
+          "DeploymentStyle": {
+            "DeploymentType": "IN_PLACE",
+            "DeploymentOption": "WITHOUT_TRAFFIC_CONTROL"
+          },
+          "Ec2TagFilters": [
+            {
+              "Type": "KEY_AND_VALUE",
+              "Key": "Name",
+              "Value": "EC2Instance"
+            }
+          ],
+          "ServiceRoleArn": {
+            "Fn::GetAtt": [
+              "CodeDeployServiceRole",
+              "Arn"
+            ]
+          }
+        }
+      },
 	  
 	  "s3Bucket": {
          "Type": "AWS::S3::Bucket",
@@ -233,13 +265,6 @@
 		      "Description" : "The EC2 Service",
 		      "Value" : {"Ref" : "CodeDeployEC2ServiceRole"},
 		      "Export" : {"Name" : "csye6225-cicd-CodeDeployEC2ServiceRole"}
-    			},
-        "codeservicerole" : {
-		      "Description" : "The Codedeploy Service",
-		      "Value": {
-                    "Fn::GetAtt" : ["CodeDeployServiceRole", "Arn"]
-                },
-		      "Export" : {"Name" : "csye6225-cicd-CodeDeployServiceRole"}
     			},
 
 	    "lambdaexecutionrole" : {
