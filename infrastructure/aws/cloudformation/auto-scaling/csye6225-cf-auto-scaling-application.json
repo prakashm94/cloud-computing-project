@@ -103,6 +103,12 @@
                   "IpProtocol":"tcp",
                   "ToPort":80
                },
+{
+                  "CidrIp":"0.0.0.0/0",
+                  "FromPort":8080,
+                  "IpProtocol":"tcp",
+                  "ToPort":8080
+               },
                {
                   "CidrIp":"0.0.0.0/0",
                   "FromPort":443,
@@ -146,7 +152,7 @@
       "asglaunchconfig":{
          "Type":"AWS::AutoScaling::LaunchConfiguration",
          "Properties":{
-            "AssociatePublicIpAddress":false,
+            "AssociatePublicIpAddress":true,
             "BlockDeviceMappings":[
                {
                   "DeviceName":"/dev/sda1",
@@ -320,12 +326,13 @@
          "Type":"AWS::ElasticLoadBalancingV2::TargetGroup",
          "Properties":{
             "Name":"myEC2InstancesTargetGroup",
-            "Port":443,
-            "Protocol":"HTTPS",
-            "HealthCheckIntervalSeconds" : 60,
-            "UnhealthyThresholdCount" : 10,
+            "Port":8080,
+            "Protocol":"HTTP",
+            "HealthCheckIntervalSeconds" : 30,
+            "UnhealthyThresholdCount" : 5,
+            "HealthyThresholdCount" : 3,
             "HealthCheckPath" : "/",
-            "HealthCheckTimeoutSeconds" : 30,
+            "HealthCheckTimeoutSeconds" : 5,
             "TargetType":"instance",
             "VpcId":{
                "Fn::ImportValue":"networkVpcId"
@@ -517,13 +524,13 @@
       "CPUAlarmHigh":{
          "Type":"AWS::CloudWatch::Alarm",
          "Properties":{
-            "AlarmDescription":"Scale-up if CPU > 90% for 10 minutes",
+            "AlarmDescription":"Scale-up if CPU > 10% for 2 minutes",
             "MetricName":"CPUUtilization",
             "Namespace":"AWS/EC2",
             "Statistic":"Average",
-            "Period":"300",
+            "Period":"120",
             "EvaluationPeriods":"2",
-            "Threshold":"90",
+            "Threshold":"10",
             "AlarmActions":[
                {
                   "Ref":"WebServerScaleUpPolicy"
@@ -543,13 +550,13 @@
       "CPUAlarmLow":{
          "Type":"AWS::CloudWatch::Alarm",
          "Properties":{
-            "AlarmDescription":"Scale-down if CPU < 70% for 10 minutes",
+            "AlarmDescription":"Scale-down if CPU < 8% for 2 minutes",
             "MetricName":"CPUUtilization",
             "Namespace":"AWS/EC2",
             "Statistic":"Average",
-            "Period":"300",
+            "Period":"120",
             "EvaluationPeriods":"2",
-            "Threshold":"70",
+            "Threshold":"8",
             "AlarmActions":[
                {
                   "Ref":"WebServerScaleDownPolicy"
