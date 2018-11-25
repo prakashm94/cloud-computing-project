@@ -194,6 +194,13 @@
         "Name" : "publicSubnetOne"
       }
     },
+    "publicSubnetIdTwo" : {
+      "Description" : "The ID of web server security group",
+      "Value" : {"Ref" : "SubnetTwo"},
+      "Export" : {
+        "Name" : "publicSubnetTwo"
+      }
+    },
     "privateSubnetIdOne" : {
       "Description" : "The ID of db security group",
       "Value" : {"Ref" : "SubnetFour"},
