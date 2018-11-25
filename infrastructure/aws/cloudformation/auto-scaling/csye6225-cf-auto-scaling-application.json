@@ -386,24 +386,6 @@
             "Protocol":"HTTPS"
          }
       },
-      "ElasticLoadBalanceListener2":{
-         "Type":"AWS::ElasticLoadBalancingV2::Listener",
-         "Properties":{
-            "DefaultActions":[
-               {
-                  "Type":"forward",
-                  "TargetGroupArn":{
-                     "Ref":"ELBTargetGroup"
-                  }
-               }
-            ],
-            "LoadBalancerArn":{
-               "Ref":"ElasticLoadBalancer"
-            },
-            "Port":80,
-            "Protocol":"HTTP"
-         }
-      },
       "DomainRecordSet":{
          "Type":"AWS::Route53::RecordSet",
          "Properties":{
