@@ -1,0 +1,229 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Create WAF and Rule",
+  "Resources": {
+   "SqlInjDetection": {
+      "Type": "AWS::WAFRegional::SqlInjectionMatchSet",
+      "Properties": {
+        "Name": "Find SQL injections in the query string",
+        "SqlInjectionMatchTuples": [
+          {
+            "FieldToMatch": {
+              "Type": "QUERY_STRING"
+            },
+            "TextTransformation": "URL_DECODE"
+          }
+        ]
+      }
+    },
+    "SqlInjRule" : {
+      "Type": "AWS::WAFRegional::Rule",
+      "Properties": {
+        "Name": "SqlInjRule",
+        "MetricName" : "SqlInjRule",
+        "Predicates": [
+          {
+            "DataId" : {  "Ref" : "SqlInjDetection" },
+            "Negated" : false,
+            "Type" : "SqlInjectionMatch"
+          }
+        ]
+      }
+    },
+    "MyIPSetBlacklist1": {
+      "Type": "AWS::WAFRegional::IPSet",
+      "Properties": {
+        "Name": "IPSet for blacklisted IP adresses",
+        "IPSetDescriptors": [
+          {
+            "Type" : "IPV4",
+            "Value" : "155.33.133.38/32"
+          },
+          {
+            "Type" : "IPV4",
+            "Value" : "192.0.7.0/24"
+          }
+        ]
+      }      
+    },
+    "MyIPSetRule" : {
+      "Type": "AWS::WAFRegional::Rule",
+      "Properties": {
+        "Name": "MyIPSetRule",
+        "MetricName" : "MyIPSetRule",
+        "Predicates": [
+          {
+            "DataId" : {  "Ref" : "MyIPSetBlacklist1" },
+            "Negated" : false,
+            "Type" : "IPMatch"
+          }
+        ]
+      }      
+    },
+    "DetectXSS": {
+      "Type": "AWS::WAFRegional::XssMatchSet",
+      "Properties": {
+        "Name": "XssMatchSet",
+        "XssMatchTuples": [
+          {
+            "FieldToMatch": {
+              "Type": "URI"
+            },
+            "TextTransformation": "COMPRESS_WHITE_SPACE"
+          },
+          {
+            "FieldToMatch": {
+              "Type": "QUERY_STRING"
+            },
+            "TextTransformation": "NONE"
+          }
+        ]
+      }
+    },
+    "XSSRule" : {
+      "Type": "AWS::WAFRegional::Rule",
+      "Properties": {
+        "Name": "XSSRule",
+        "MetricName" : "XSSRule",
+        "Predicates": [
+          {
+            "DataId" : {  "Ref" : "DetectXSS" },
+            "Negated" : false,
+            "Type" : "XssMatch"
+          }
+        ]
+      }
+    },
+    "MySizeConstraint": {
+      "Type": "AWS::WAFRegional::SizeConstraintSet",
+      "Properties": {
+        "Name": "SizeConstraints",
+        "SizeConstraints": [
+          {
+            "ComparisonOperator": "GE",
+            "FieldToMatch": {
+              "Type": "BODY"
+            },
+            "Size": "102400",
+            "TextTransformation": "NONE"
+          }
+        ]
+      }
+    },
+    "SizeConstraintRule" : {
+      "Type": "AWS::WAFRegional::Rule",
+      "Properties": {
+        "Name": "SizeConstraintRule",
+        "MetricName" : "SizeConstraintRule",
+        "Predicates": [
+          {
+            "DataId" : {  "Ref" : "MySizeConstraint" },
+            "Negated" : false,
+            "Type" : "SizeConstraint"
+          }
+        ]
+      }
+    },
+    "BadReferers": {
+  "Type": "AWS::WAFRegional::ByteMatchSet",
+  "Properties": {
+    "Name": "ByteMatch for matching bad HTTP referers",
+    "ByteMatchTuples": [
+      {
+        "FieldToMatch" : {
+          "Type": "HEADER",
+          "Data": "referer"
+        },
+        "TargetString" : "badrefer1",
+        "TextTransformation" : "NONE",
+        "PositionalConstraint" : "CONTAINS"
+      },
+      {
+        "FieldToMatch" : {
+          "Type": "HEADER",
+          "Data": "referer"
+        },
+        "TargetString" : "badrefer2",
+        "TextTransformation" : "NONE",
+        "PositionalConstraint" : "CONTAINS"
+      }
+    ]
+  }
+},
+    "BadReferersRule" : {
+      "Type": "AWS::WAFRegional::Rule",
+      "Properties": {
+        "Name": "BadReferersRule",
+        "MetricName" : "BadReferersRule",
+        "Predicates": [
+          {
+            "DataId" : {  "Ref" : "BadReferers" },
+            "Negated" : false,
+            "Type" : "ByteMatch"
+          }
+        ]
+      }
+    },
+    "MyWebACL": {
+      "Type": "AWS::WAFRegional::WebACL",
+      "Properties": {
+        "Name": "MyACL",
+        "DefaultAction": {
+          "Type": "ALLOW"
+        },
+        "MetricName" : "MyWebACL",
+        "Rules": [
+	 {
+            "Action" : {
+              "Type" : "BLOCK"
+            },
+            "Priority" : 5,
+            "RuleId" : { "Ref" : "MyIPSetRule" }
+          },
+
+	  {
+            "Action" : {
+              "Type" : "BLOCK"
+            },
+            "Priority" : 1,
+            "RuleId" : { "Ref" : "SizeConstraintRule" }
+          },
+          
+          {
+            "Action" : {
+              "Type" : "BLOCK"
+            },
+            "Priority" : 3,
+            "RuleId" : { "Ref" : "XSSRule" }
+          },
+          
+          
+          {
+            "Action" : {
+              "Type" : "BLOCK"
+            },
+            "Priority" : 4,
+            "RuleId" : { "Ref" : "SqlInjRule" }
+          },
+
+	  {
+            "Action" : {
+              "Type" : "BLOCK"
+            },
+            "Priority" : 2,
+            "RuleId" : { "Ref" : "BadReferersRule" }
+          }
+        ]
+      }      
+    },
+    "MyWebACLAssociation": {
+	"Type": "AWS::WAFRegional::WebACLAssociation",
+  	"DependsOn" : "MyWebACL",
+	"Properties": {
+	"ResourceArn": {"Fn::ImportValue" : "csye6225-fall2018-ElasticLoadBalancer"},
+	 "WebACLId": { "Ref": "MyWebACL" }
+  		}
+	}
+
+  }
+}

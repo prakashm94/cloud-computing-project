@@ -617,6 +617,11 @@
          "Export":{
             "Name":"csye6225-fall2018-s3lambda"
          }
-      }
+      },
+    "LoadBalancer" : {
+		      "Description" : "The Load balancer",
+		      "Value" : {"Ref" : "ElasticLoadBalancer"},
+		      "Export" : {"Name" : "ApplicationLoadBalancerArn"}
+    			}
    }
 }
