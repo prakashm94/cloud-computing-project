@@ -1,8 +1,6 @@
 {
     "Parameters":{
-        "resource1" : {
-            "Type" : "String"
-        },
+
         "resource2" : {
             "Type" : "String"
         },
@@ -16,9 +14,6 @@
             "Type" : "String"
         },
 		"domainName" : {
-            "Type" : "String"
-        },
-		"applicationName" : {
             "Type" : "String"
         }
     },
